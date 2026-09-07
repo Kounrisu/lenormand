@@ -39,30 +39,4 @@
       </p>
     }
   }
-
-  @if (done() || draw().atCut) {
-    <div class="reading__result" [attr.aria-live]="'polite'">
-      <p
-        class="reading__verdict"
-        [class.reading__verdict--yes]="draw().answer === 'yes'"
-        [class.reading__verdict--no]="draw().answer === 'no'"
-      >
-        {{ draw().answer === 'yes' ? 'Yes' : 'No' }}
-      </p>
-      <p class="reading__detail">
-        @if (draw().atCut) {
-          The Ring was waiting at the cut — a yes at once.
-        } @else if (draw().answer === 'yes') {
-          The Ring came up {{ draw().ringPosition }} cards in.
-        } @else {
-          The Ring stayed in the pack, under the first {{ cutoff }}.
-        }
-      </p>
-    </div>
-
-    <div class="reading__actions">
-      <p class="reading__again-lede">The table is still listening.</p>
-      <button type="button" class="btn btn--primary" (click)="askOnceMore()">Seek a yes or no</button>
-    </div>
-  }
 </div>

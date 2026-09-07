@@ -10,11 +10,12 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.55rem;
+  gap: 0.5rem;
   width: 100%;
   height: 100%;
   max-width: none;
   margin: 0 auto;
+  padding: 0.2rem 0.1rem 0.3rem;
   text-align: center;
   overflow: hidden;
 }
@@ -36,8 +37,8 @@
 }
 
 .reading__cut {
-  --card-w: min(14rem, 56cqw);
-  --card-h: calc(min(14rem, 56cqw) * 1.31);
+  --card-w: min(14rem, 56cqw, 46cqh);
+  --card-h: calc(min(14rem, 56cqw, 46cqh) * 1.31);
   margin: 0.4rem 0;
 }
 
@@ -64,9 +65,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  gap: 0.65rem;
+  justify-content: center;
+  gap: 0.5rem;
   width: 100%;
+  min-height: 0;
 }
 
 .stock {
@@ -89,13 +91,21 @@
 }
 
 .tableau {
-  --card-w: 100%;
+  /* Bounded by BOTH the mat's available width and its available height
+     (cqi/cqh, via .mat's container-type: size) — never a fixed rem size.
+     A card sized only for width can still make a 3-row tableau taller
+     than the mat; sized only for height, a 5-column row can overflow a
+     narrow mat. Taking the smaller of both keeps the whole grid inside
+     the felt regardless of the mat's aspect ratio. */
+  --card-w: min(19cqi, 11.5cqh);
   --card-h: auto;
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 0.35rem 0.3rem;
+  grid-template-columns: repeat(5, var(--card-w));
+  gap: 0.3rem 0.25rem;
   justify-content: center;
+  align-content: center;
   width: 100%;
+  min-height: 0;
 }
 
 .tableau__slot {
@@ -116,71 +126,19 @@
 @media (min-width: 700px) {
   .pit {
     flex-direction: row;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
     gap: 0.8rem;
-  }
-
-  .tableau {
-    --card-w: 8rem;
-    --card-h: 10.5rem;
-    grid-template-columns: repeat(5, var(--card-w));
-    width: auto;
-    flex: 1;
   }
 
   .stock {
     --card-w: 6.8rem;
     --card-h: 8.9rem;
-    margin-top: 0.4rem;
-  }
-
-  .reading__cut {
-    --card-w: 14rem;
-    --card-h: 18.3rem;
   }
 }
 
-.reading__result {
-  margin-top: 0.4rem;
-}
-
-.reading__verdict {
-  margin: 0;
-  font-family: Fraunces, ui-serif, Georgia, serif;
-  font-size: clamp(3.6rem, 18vw, 5.6rem);
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  line-height: 0.9;
-}
-
-.reading__verdict--yes {
-  color: var(--yes);
-}
-
-.reading__verdict--no {
-  color: var(--no);
-}
-
-.reading__detail {
-  margin: 0.55rem 0 0;
-  color: var(--muted);
-  font-size: 0.95rem;
-}
-
-.reading__actions {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.45rem;
-  margin-top: 0.35rem;
-}
-
-.reading__again-lede {
-  margin: 0;
-  font-family: Fraunces, ui-serif, Georgia, serif;
-  font-style: italic;
-  font-size: 0.95rem;
-  color: var(--muted);
-  text-shadow: 0 1px 10px rgba(20, 8, 4, 0.45);
+@media (prefers-reduced-motion: reduce) {
+  .tableau__slot {
+    animation: none;
+  }
 }

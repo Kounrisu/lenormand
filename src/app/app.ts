@@ -22,16 +22,23 @@ export class App {
   protected readonly view = signal<View>('ask');
   protected readonly question = signal<string | null>(null);
   protected readonly draw = signal<DrawResult | null>(null);
+  protected readonly readingDone = signal(false);
 
   protected onDraw(event: DrawnEvent): void {
     this.question.set(event.question);
     this.draw.set(event.result);
+    this.readingDone.set(false);
     this.view.set('reading');
+  }
+
+  protected onRevealComplete(): void {
+    this.readingDone.set(true);
   }
 
   protected askAgain(): void {
     this.view.set('ask');
     this.draw.set(null);
+    this.readingDone.set(false);
   }
 
   protected showHistory(): void {

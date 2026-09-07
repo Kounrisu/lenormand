@@ -13,7 +13,7 @@ import { CardComponent } from '../../shared/card/card';
 import { ReadingsService } from '../../core/readings.service';
 import { RING_CARD_NUMBER, YES_NO_CUTOFF } from '../../core/cards.data';
 import type { DrawResult } from '../../core/deck';
-import { playDeal, playPress } from '../../core/sounds';
+import { playDeal } from '../../core/sounds';
 
 const REVEAL_MS = 320;
 const RING_BEAT_MS = 900;
@@ -30,9 +30,10 @@ export class ReadingComponent implements OnInit, OnDestroy {
 
   readonly draw = input.required<DrawResult>();
   readonly question = input<string | null>(null);
-  readonly again = output<void>();
+  /** Fires once, exactly when the reveal animation reaches its result — the
+   * parent renders the verdict/back-to-table panel outside the felt mat. */
+  readonly revealComplete = output<void>();
 
-  protected readonly cutoff = YES_NO_CUTOFF;
   protected readonly ringNumber = RING_CARD_NUMBER;
   protected readonly stockLayers = [0, 1, 2, 3, 4, 5, 6];
   protected readonly revealedCount = signal(0);
@@ -45,12 +46,12 @@ export class ReadingComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (this.draw().atCut) {
-      void this.record();
+      this.finish();
       return;
     }
     if (prefersReducedMotion()) {
       this.revealedCount.set(YES_NO_CUTOFF);
-      void this.record();
+      this.finish();
       return;
     }
     this.queueReveal(REVEAL_MS);
@@ -61,18 +62,13 @@ export class ReadingComponent implements OnInit, OnDestroy {
     clearTimeout(this.timer);
   }
 
-  protected askOnceMore(): void {
-    playPress();
-    this.again.emit();
-  }
-
   protected skipToEnd(): void {
     if (this.done()) {
       return;
     }
     clearTimeout(this.timer);
     this.revealedCount.set(YES_NO_CUTOFF);
-    void this.record();
+    this.finish();
   }
 
   private queueReveal(delay: number): void {
@@ -87,12 +83,17 @@ export class ReadingComponent implements OnInit, OnDestroy {
     this.revealedCount.set(next);
     playDeal();
     if (next >= YES_NO_CUTOFF) {
-      void this.record();
+      this.finish();
       return;
     }
     const justRevealed = this.firstThirteen()[next - 1];
     const delay = justRevealed.number === RING_CARD_NUMBER ? RING_BEAT_MS : REVEAL_MS;
     this.queueReveal(delay);
+  }
+
+  private finish(): void {
+    this.revealComplete.emit();
+    void this.record();
   }
 
   private async record(): Promise<void> {

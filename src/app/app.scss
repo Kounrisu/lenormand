@@ -175,6 +175,89 @@
   display: none;
 }
 
+.result-sheet {
+  /* A sibling of .scene, not a descendant of .mat — .mat's `container-type:
+     size` makes it a containing block for its own fixed-position
+     descendants (same mechanism as `transform`), so a verdict/button placed
+     inside it could never truly escape that small box. Rendering this
+     outside .mat entirely, positioned fixed against the real viewport, is
+     what lets it show at a comfortable size regardless of how little room
+     the felt mat has on a given screen. */
+  position: fixed;
+  z-index: 6;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--cream);
+  color: var(--ink);
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -14px 40px rgba(0, 0, 0, 0.45);
+  padding: 1.1rem 1.25rem max(1.1rem, env(safe-area-inset-bottom));
+  text-align: center;
+  animation: result-sheet-in 0.35s ease-out;
+}
+
+@keyframes result-sheet-in {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.result-sheet__verdict {
+  margin: 0;
+  font-family: Fraunces, ui-serif, Georgia, serif;
+  font-size: clamp(2.6rem, 13vw, 4rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+}
+
+.result-sheet__verdict--yes {
+  color: #1d5c32;
+}
+
+.result-sheet__verdict--no {
+  color: #8a2433;
+}
+
+.result-sheet__detail {
+  margin: 0.4rem 0 0.9rem;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .result-sheet {
+    animation: none;
+  }
+}
+
+@media (min-width: 700px) {
+  .result-sheet {
+    left: 50%;
+    right: auto;
+    bottom: 1.5rem;
+    transform: translateX(-50%);
+    width: min(28rem, 90vw);
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+  }
+
+  @keyframes result-sheet-in {
+    from {
+      transform: translate(-50%, 1.5rem);
+      opacity: 0;
+    }
+    to {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+  }
+}
+
 @media (orientation: landscape) and (min-width: 700px) {
   .scene {
     /* pit.jpg (1280×720) */

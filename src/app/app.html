@@ -15,7 +15,7 @@
               }
               @case ('reading') {
                 @if (draw(); as d) {
-                  <app-reading [draw]="d" [question]="question()" (again)="askAgain()" />
+                  <app-reading [draw]="d" [question]="question()" (revealComplete)="onRevealComplete()" />
                 }
               }
               @case ('history') {
@@ -48,5 +48,27 @@
         }
       </header>
     </div>
+
+    @if (view() === 'reading' && readingDone() && draw(); as d) {
+      <div class="result-sheet" [attr.aria-live]="'polite'">
+        <p
+          class="result-sheet__verdict"
+          [class.result-sheet__verdict--yes]="d.answer === 'yes'"
+          [class.result-sheet__verdict--no]="d.answer === 'no'"
+        >
+          {{ d.answer === 'yes' ? 'Yes' : 'No' }}
+        </p>
+        <p class="result-sheet__detail">
+          @if (d.atCut) {
+            The Ring was waiting at the cut — a yes at once.
+          } @else if (d.answer === 'yes') {
+            The Ring came up {{ d.ringPosition }} cards in.
+          } @else {
+            The Ring stayed in the pack, under the first 13.
+          }
+        </p>
+        <button type="button" class="btn btn--primary" (click)="askAgain()">← Back to the table</button>
+      </div>
+    }
   }
 </div>
