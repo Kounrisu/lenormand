@@ -1,0 +1,11 @@
+@if (faceDown()) {
+  <div class="card card--back">
+    <span class="card__moon">☾</span>
+  </div>
+} @else {
+  <div class="card" [class.card--highlighted]="highlighted()">
+    <span class="card__number">{{ card().number }}</span>
+    <span class="card__symbol">{{ symbolFor(card().slug) }}</span>
+    <span class="card__name">{{ card().name }}</span>
+  </div>
+}

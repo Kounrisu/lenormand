@@ -1,0 +1,36 @@
+<div class="reading">
+  @if (question()) {
+    <p class="reading__question">“{{ question() }}”</p>
+  }
+
+  <p class="reading__hint">The first {{ cutoff }} cards decide it — watch for the Ring 💍</p>
+
+  <div class="reading__row">
+    @for (card of firstThirteen(); track card.number; let i = $index) {
+      <app-card
+        [card]="card"
+        [faceDown]="i >= revealedCount()"
+        [highlighted]="i < revealedCount() && card.number === 25"
+      />
+    }
+  </div>
+
+  @if (done()) {
+    <div class="reading__result" [class.reading__result--yes]="draw().answer === 'yes'" [class.reading__result--no]="draw().answer === 'no'">
+      <span class="reading__result-label">{{ draw().answer === 'yes' ? 'YES' : 'NO' }}</span>
+      <span class="reading__result-detail">
+        The Ring appeared at position {{ draw().ringPosition }}
+        @if (draw().answer === 'yes') {
+          — within the first {{ cutoff }}.
+        } @else {
+          — outside the first {{ cutoff }}.
+        }
+      </span>
+    </div>
+
+    <div class="reading__actions">
+      <button class="btn btn--primary" (click)="again.emit()">🔮 Ask again</button>
+      <button class="btn btn--ghost" (click)="viewHistory.emit()">📜 History</button>
+    </div>
+  }
+</div>

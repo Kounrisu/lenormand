@@ -1,0 +1,25 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// One row per yes/no draw. No accounts — deviceId is a client-generated UUID
+// (localStorage) so a device can list its own history. No PII, no money.
+model Reading {
+  id           Int      @id @default(autoincrement())
+  deviceId     String   @map("device_id")
+  question     String?
+  ringPosition Int      @map("ring_position")
+  answer       String
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([deviceId])
+  @@map("readings")
+}

@@ -1,0 +1,15 @@
+<div class="question panel">
+  <p class="question__kicker">Think of a yes or no question</p>
+  <h1>Shall the cards answer?</h1>
+  <p class="question__hint">
+    Hold your question in mind — writing it down is optional, just for your own record.
+  </p>
+  <textarea
+    class="question__input"
+    rows="2"
+    placeholder="Your question (optional)…"
+    [(ngModel)]="question"
+    maxlength="200"
+  ></textarea>
+  <button class="btn btn--primary" (click)="submit()">🔮 Shuffle &amp; cut</button>
+</div>

@@ -1,0 +1,96 @@
+/* Global styles — dark, mystical, fortune-telling-parlour aesthetic. Every component
+   reuses these tokens; see CLAUDE.md before introducing a new color or shape. */
+
+:root {
+  --bg: #150f23;
+  --surface: #221a35;
+  --surface-2: #2d2347;
+  --surface-3: #100b1c;
+
+  --text: #f3ead9;
+  --muted: #b8a9d9;
+
+  --accent: #d4af37; /* antique gold — primary highlight, the Ring, headings */
+  --accent-2: #7c3aed; /* violet — secondary highlight, focus states */
+  --yes: #3f9b6b; /* muted emerald */
+  --no: #b3475b; /* muted wine red */
+
+  --radius: 14px;
+  --radius-pill: 999px;
+  --shadow-soft: 0 24px 70px rgba(0, 0, 0, 0.45);
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(ellipse at top, #241a3a 0%, var(--bg) 60%);
+  color: var(--text);
+  font-family:
+    'Segoe UI',
+    Roboto,
+    system-ui,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0 0 0.5em;
+  font-family: ui-serif, 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  color: var(--accent);
+}
+
+button {
+  font-family: inherit;
+}
+
+.panel {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015)),
+    var(--surface);
+  border: 1px solid rgba(212, 175, 55, 0.18);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+
+.btn {
+  border-radius: 12px;
+  border: none;
+  padding: 0.85rem 1.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    filter 0.15s ease;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn:hover {
+  filter: brightness(1.1);
+}
+
+.btn--primary {
+  background: linear-gradient(135deg, var(--accent), #b8912a);
+  color: #1a1424;
+}
+
+.btn--ghost {
+  background: transparent;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  color: var(--text);
+}

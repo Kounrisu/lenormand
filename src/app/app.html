@@ -1,0 +1,19 @@
+<main class="app">
+  <header class="app__header">
+    <span class="app__wordmark">Lenormand <span class="app__wordmark-accent">Oracle</span></span>
+  </header>
+
+  @switch (view()) {
+    @case ('ask') {
+      <app-question (draw)="onDraw($event)" />
+    }
+    @case ('reading') {
+      @if (draw(); as d) {
+        <app-reading [draw]="d" [question]="question()" (again)="askAgain()" (viewHistory)="showHistory()" />
+      }
+    }
+    @case ('history') {
+      <app-history (back)="askAgain()" />
+    }
+  }
+</main>

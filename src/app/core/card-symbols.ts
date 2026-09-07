@@ -1,0 +1,43 @@
+/**
+ * A single glyph per card, used until real public-domain deck scans are sourced into
+ * public/cards/<slug>.jpg (see README.md "Card artwork"). Keyed by slug so swapping to
+ * real images later only touches the card component's template, not this data.
+ */
+export const CARD_SYMBOLS: Readonly<Record<string, string>> = {
+  rider: '🐎',
+  clover: '🍀',
+  ship: '⛵',
+  house: '🏠',
+  tree: '🌳',
+  clouds: '☁️',
+  snake: '🐍',
+  coffin: '⚰️',
+  bouquet: '💐',
+  scythe: '🌾',
+  whip: '⚡',
+  bird: '🐦',
+  child: '🧒',
+  fox: '🦊',
+  bear: '🐻',
+  stars: '✨',
+  stork: '🕊️',
+  dog: '🐕',
+  tower: '🗼',
+  garden: '🌷',
+  mountain: '⛰️',
+  path: '🌿',
+  mice: '🐁',
+  heart: '❤️',
+  ring: '💍',
+  book: '📖',
+  letter: '✉️',
+  gentleman: '🎩',
+  lady: '👒',
+  lily: '🌸',
+  sun: '☀️',
+  moon: '🌙',
+  key: '🔑',
+  fish: '🐟',
+  anchor: '⚓',
+  cross: '✝️',
+};
