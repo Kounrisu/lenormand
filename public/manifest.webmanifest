@@ -1,10 +1,10 @@
 {
-  "name": "Lenormand Oracle — Yes or No",
-  "short_name": "Lenormand",
-  "description": "A quick, funny yes/no reading with a 36-card Lenormand deck. No money, just for fun.",
+  "name": "Lenormand — yes or no",
+  "short_name": "Yes or no",
+  "description": "Lenormand yes or no. Shuffle, cut, and look for the Ring.",
   "display": "standalone",
-  "theme_color": "#150f23",
-  "background_color": "#150f23",
+  "theme_color": "#0c3a2c",
+  "background_color": "#0c3a2c",
   "scope": "./",
   "start_url": "./",
   "icons": [

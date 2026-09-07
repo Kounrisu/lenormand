@@ -1,15 +1,158 @@
-<div class="question panel">
-  <p class="question__kicker">Think of a yes or no question</p>
-  <h1>Shall the cards answer?</h1>
-  <p class="question__hint">
-    Hold your question in mind — writing it down is optional, just for your own record.
-  </p>
-  <textarea
-    class="question__input"
-    rows="2"
-    placeholder="Your question (optional)…"
-    [(ngModel)]="question"
-    maxlength="200"
-  ></textarea>
-  <button class="btn btn--primary" (click)="submit()">🔮 Shuffle &amp; cut</button>
+<div class="question">
+  @if (phase() === 'idle' || phase() === 'shuffling' || phase() === 'shuffled') {
+    <div class="pit">
+      @if (phase() === 'shuffling' && method() === 'wash') {
+        <div class="wash" aria-hidden="true">
+          @for (bit of washBits(); track bit.i) {
+            <span
+              class="wash__card card-back"
+              [style.transform]="'translate(' + bit.x + 'px,' + bit.y + 'px) rotate(' + bit.r + 'deg)'"
+            ></span>
+          }
+        </div>
+      }
+
+      <button
+        type="button"
+        class="pack"
+        [class.pack--busy]="phase() === 'shuffling'"
+        [class.pack--riffle]="method() === 'riffle' || method() === 'casino'"
+        [class.pack--overhand]="method() === 'overhand'"
+        [class.pack--strip]="method() === 'strip'"
+        [class.pack--wash]="method() === 'wash'"
+        [disabled]="phase() === 'shuffling'"
+        (click)="shuffleAgain()"
+      >
+        <span class="pack__heap pack__heap--a">
+          @for (i of leftLayers; track i) {
+            <span class="pack__layer card-back" [style.--i]="i"></span>
+          }
+        </span>
+        <span class="pack__heap pack__heap--b">
+          @for (i of rightLayers; track i) {
+            <span class="pack__layer card-back" [style.--i]="i"></span>
+          }
+        </span>
+        <span class="pack__label">{{ phase() === 'shuffling' ? method() + '…' : 'Shuffle' }}</span>
+      </button>
+    </div>
+
+    <div class="question__side">
+      <h1 class="question__title">Yes or no?</h1>
+      <p class="question__lede">
+        @switch (phase()) {
+          @case ('shuffling') {
+            Hold the question. Don’t rush the shuffle.
+          }
+          @case ('shuffled') {
+            Shuffle again, or split the pack yourself, then ask.
+          }
+          @default {
+            @if (factory()) {
+              Hold a yes-or-no question. Shuffle, or split the pack by hand, then ask.
+            } @else {
+              The pack is as you left it. Shuffle, split it yourself, or ask.
+            }
+          }
+        }
+      </p>
+
+      <div class="question__controls">
+        <div class="methods" role="radiogroup" aria-label="Shuffle style">
+          @for (item of methods; track item.id) {
+            <button
+              type="button"
+              class="methods__chip"
+              role="radio"
+              [attr.aria-checked]="method() === item.id"
+              [class.methods__chip--on]="method() === item.id"
+              [disabled]="phase() === 'shuffling'"
+              (click)="pickMethod(item.id)"
+            >
+              {{ item.label }}
+            </button>
+          }
+        </div>
+
+        @if (phase() === 'idle' || phase() === 'shuffled') {
+          <p class="question__or">or</p>
+          <button type="button" class="question__split" (click)="spreadToMix()">Split it yourself</button>
+          <button type="button" class="btn btn--primary question__ask" (click)="spreadToAsk()">
+            Yes or no?
+          </button>
+        }
+      </div>
+
+      @if ((phase() === 'idle' || phase() === 'shuffled') && !factory()) {
+        <button type="button" class="question__shuffle" (click)="newPack()">New pack</button>
+      }
+
+      @if (phase() === 'idle' || phase() === 'shuffled') {
+        <button
+          type="button"
+          class="question__toggle"
+          role="switch"
+          [attr.aria-checked]="noteQuestion()"
+          (click)="toggleNote()"
+        >
+          <span class="question__switch" [class.question__switch--on]="noteQuestion()">
+            <span class="question__knob"></span>
+          </span>
+          Write the question down
+        </button>
+
+        @if (noteQuestion()) {
+          <label class="question__field" for="question-input">
+            <span class="question__label">Your question</span>
+            <textarea
+              id="question-input"
+              class="question__input"
+              name="question"
+              rows="2"
+              maxlength="200"
+              placeholder="Will it work out?"
+              [(ngModel)]="question"
+            ></textarea>
+          </label>
+        }
+      }
+    </div>
+  }
+
+  @if (phase() === 'mixing' || phase() === 'asking' || phase() === 'cut-reveal') {
+    <p class="question__lede">
+      @if (phase() === 'cut-reveal') {
+        {{ pack()[cutDepth() - 1]?.name }}
+      } @else if (phase() === 'mixing') {
+        Tap where you split. Nothing turns over.
+      } @else {
+        Tap the cut. That card answers.
+      }
+    </p>
+
+    <div class="spread" role="list">
+      @for (card of pack(); track card.number; let i = $index) {
+        <button
+          type="button"
+          class="spread__slot"
+          role="listitem"
+          [class.spread__slot--chosen]="cutDepth() > 0 && i + 1 === cutDepth()"
+          [style.--r]="tilt(i)"
+          [style.--z]="i"
+          [disabled]="phase() === 'cut-reveal' || (phase() === 'mixing' && cutDepth() > 0)"
+          (click)="chooseCut(i + 1)"
+        >
+          <app-card
+            [card]="card"
+            [faceDown]="!(phase() === 'cut-reveal' && i + 1 === cutDepth() && !cutFaceDown())"
+            [highlighted]="phase() === 'cut-reveal' && i + 1 === cutDepth() && card.number === ringNumber"
+          />
+        </button>
+      }
+    </div>
+
+    @if (phase() === 'mixing' || phase() === 'asking') {
+      <button type="button" class="question__shuffle" (click)="gather()">Back to the pack</button>
+    }
+  }
 </div>

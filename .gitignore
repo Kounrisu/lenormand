@@ -38,6 +38,9 @@ yarn-error.log
 testem.log
 /typings
 __screenshots__/
+.tmp-screens/
+.tmp-shots/
+.tmp-cards/
 
 # Backend / Prisma
 backend/node_modules

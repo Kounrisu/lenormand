@@ -1,0 +1,40 @@
+<div class="looks">
+  <h2>Looks</h2>
+  <p class="looks__lede">The mat the pack sits on, and the back of the cards.</p>
+
+  <h3>Mat</h3>
+  <div class="looks__row" role="radiogroup" aria-label="Mat">
+    @for (cloth of theme.cloths; track cloth.id) {
+      <button
+        type="button"
+        class="looks__swatch"
+        role="radio"
+        [attr.aria-checked]="theme.cloth().id === cloth.id"
+        [class.looks__swatch--on]="theme.cloth().id === cloth.id"
+        [style.background-image]="'url(' + cloth.src + ')'"
+        (click)="theme.pickCloth(cloth.id)"
+      >
+        {{ cloth.label }}
+      </button>
+    }
+  </div>
+
+  <h3>Pack</h3>
+  <div class="looks__row" role="radiogroup" aria-label="Card back">
+    @for (pack of theme.backs; track pack.id) {
+      <button
+        type="button"
+        class="looks__pack"
+        role="radio"
+        [attr.aria-checked]="theme.back().id === pack.id"
+        [class.looks__pack--on]="theme.back().id === pack.id"
+        (click)="theme.pickBack(pack.id)"
+      >
+        <span class="looks__pack-face" [style.background-image]="'url(' + pack.src + ')'"></span>
+        {{ pack.label }}
+      </button>
+    }
+  </div>
+
+  <button type="button" class="btn btn--primary" (click)="back.emit()">Back to the table</button>
+</div>

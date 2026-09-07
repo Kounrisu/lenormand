@@ -4,39 +4,68 @@ Project guidance for Claude Code working in this repository.
 
 ## What this is
 
-A funny, no-stakes yes/no oracle game using a 36-card Lenormand deck. Shuffle, cut, and
-check whether the Ring card (#25) landed in the first 13 cards. No accounts, no money,
+A funny, no-stakes yes/no game using a 36-card Lenormand deck. No accounts, no money,
 no serious "fortune telling" framing — keep the tone light.
+
+The yes/no rule follows the French "méthode de l'Anneau" (Ring = Ace of Clubs, card
+#25):
+
+1. Shuffle — the player picks a real table method (riffle, overhand, strip,
+   wash, or the casino riffle–riffle–strip–riffle) and can shuffle as many
+   times as they like while holding the question. The pack stays squared after
+   each shuffle.
+2. **Split it yourself** is a blind, player-chosen split — not a shuffle method.
+   Spread the 36, tap where the pack breaks, restack without turning a card.
+3. **Yes or no?** is the real cut. Spread, tap one card, that card turns over
+   and is the answer. If it is the Ring, **yes at once**. Otherwise restack
+   and deal the new top 13: Ring in those 13 is **yes**, after that is **no**.
+   On phone the spread is 6 columns; on desktop, 6.
+4. The pack never resets itself. After shuffles, mix-cuts, and a finished
+   reading, the next game starts from that same order. **New pack** is the only
+   way to restore Rider-through-Cross. Persist that order in localStorage.
+
+The product name is **Lenormand — yes or no** (wordmark “Lenormand”). Do not
+call the app “the ring”; the Ring is only the pivot card in the method.
+
+Don't skip the player-chosen cut in favour of a hidden random cut. Don't add login.
 
 ## Frontend aesthetics
 
-Dark, mystical fortune-telling-parlour aesthetic — deep indigo/violet backgrounds,
-antique gold accents, parchment-cream text. See `src/styles.scss` for the token set;
+A card table, not a mystic SaaS panel. The page is an overhead photograph of a
+wooden table with a card mat; the pack is laid out **on that mat in the picture**,
+not over the wood. Cream playing-card stock, chosen pack backs, gold for the Ring
+and the ask. **Looks** lets the player pick the mat cloth and the back; persist
+in localStorage. See `src/styles.scss` for the token set;
 reuse it rather than introducing new colors ad hoc.
 
-- Colors: `--bg`/`--surface`/`--surface-2`/`--surface-3` (background layers), `--text`/
-  `--muted` (the only two text colors), `--accent` (antique gold — headings, primary
-  actions, the Ring), `--accent-2` (violet, reserved for secondary highlights/focus),
-  `--yes` (muted emerald) and `--no` (muted wine red) for the two possible answers only —
-  don't reuse them for anything else.
-- Headings use the serif stack (`ui-serif, 'Iowan Old Style', 'Palatino Linotype',
-  Georgia, serif`); body text stays on the plain sans stack. Don't mix a third font.
-- Buttons: `.btn--primary` (gold gradient) for the main call to action per screen,
-  `.btn--ghost` (outlined) for secondary/navigational actions. No sharp 0-radius
-  rectangular buttons.
-- Panels (`.panel`): a subtle top-lit gradient over `var(--surface)`, thin gold-tinted
-  border, `var(--radius)`, `var(--shadow-soft)` — reuse this for any new card-like
-  container instead of inventing a one-off box style.
-- Cards (`shared/card/`): fixed-size bordered rectangles, gold border, a symbol/glyph
-  centered, number top-left, name at the bottom. A highlighted card (the Ring, once
-  revealed within the first 13) gets an emerald glow ring + lift, matching the "Yes"
-  color — never a border-only or checkmark treatment.
+- Table: `--baize` / `--baize-deep` (felt), `--cream` / `--ink` (card faces and the
+  history slip), `--text` / `--muted` (type sitting on the felt), `--gold` (the Ring,
+  the shuffle cue, focus), `--oxblood` (card backs). `--yes` and `--no` are the two
+  verdict colors only — don't reuse them for chrome.
+- Type: **Fraunces** for the wordmark, the home title, the Yes/No verdict, and card
+  numbers. **Karla** for everything else. Don't add a third family.
+- The home screen is a table with a tappable stacked deck — not a form. The question
+  field stays hidden behind the "Write the question down" switch; writing a question
+  is optional and off by default.
+- Primary action on the table is **Yes or no?** (`.btn--primary`, gold pill). Shuffle
+  methods are chips; **Split it yourself** is italic table-talk under an “or”, and
+  never turns a card. `.btn--ghost` for secondary navigation. Pills, not sharp
+  rectangles.
+- Cards (`shared/card/`): the face is the 1799 Game of Hope scan
+  (`public/cards/<slug>.jpg`) — don't overlay emoji, numbers, or pips on top of it
+  (those are already in the engraving). The back is a dark museum-style
+  photograph of a gilt damask reverse on midnight pasteboard — not a bright
+  cream print.
+  The Ring, once revealed in the first 13 or at the cut, lifts and gets a gold glow
+  — never a checkmark or a border-only treatment.
+- History sits on a cream paper slip on the table, not a dark glass panel.
+- Copy stays plain and game-like. No ALL-CAPS kickers, no "oracle" solemnity.
 
 ## Card artwork
 
-Currently CSS/emoji placeholders (`src/app/core/card-symbols.ts`), not real scans — see
-README.md "Card artwork" for the plan to swap in public-domain 19th-century Lenormand
-deck scans. Don't add copyrighted modern deck artwork.
+Faces are public-domain 1799 Game of Hope scans in `public/cards/`. Don't replace them
+with emoji, AI pastiches, or copyrighted modern decks (Dondorf reprints still in
+commerce, etc.).
 
 ## Backend
 

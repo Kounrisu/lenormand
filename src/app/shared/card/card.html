@@ -1,11 +1,15 @@
-@if (faceDown()) {
-  <div class="card card--back">
-    <span class="card__moon">☾</span>
+<div class="card" [class.card--flipped]="!faceDown()" [class.card--highlighted]="highlighted()">
+  <div class="card__inner">
+    <div class="card__face card__face--back">
+      <img class="card__art" [src]="backSrc()" alt="" draggable="false" />
+    </div>
+    <div class="card__face card__face--front">
+      <img
+        class="card__art"
+        [src]="'cards/' + card().slug + '.jpg'"
+        [alt]="card().name"
+        draggable="false"
+      />
+    </div>
   </div>
-} @else {
-  <div class="card" [class.card--highlighted]="highlighted()">
-    <span class="card__number">{{ card().number }}</span>
-    <span class="card__symbol">{{ symbolFor(card().slug) }}</span>
-    <span class="card__name">{{ card().name }}</span>
-  </div>
-}
+</div>

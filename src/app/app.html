@@ -1,19 +1,43 @@
-<main class="app">
-  <header class="app__header">
-    <span class="app__wordmark">Lenormand <span class="app__wordmark-accent">Oracle</span></span>
-  </header>
+<div class="app">
+  <div class="scene">
+    <img class="scene__photo scene__photo--phone" src="table/seat.jpg" alt="" />
+    <img class="scene__photo scene__photo--desk" src="table/pit.jpg" alt="" />
 
-  @switch (view()) {
-    @case ('ask') {
-      <app-question (draw)="onDraw($event)" />
-    }
-    @case ('reading') {
-      @if (draw(); as d) {
-        <app-reading [draw]="d" [question]="question()" (again)="askAgain()" (viewHistory)="showHistory()" />
+    <header class="app__header">
+      @if (view() !== 'looks') {
+        <button type="button" class="app__looks" (click)="showLooks()">Looks</button>
+      } @else {
+        <span class="app__header-slot"></span>
       }
-    }
-    @case ('history') {
-      <app-history (back)="askAgain()" />
-    }
-  }
-</main>
+      <p class="app__wordmark">Lenormand</p>
+      @if (view() !== 'history' && view() !== 'looks') {
+        <button type="button" class="app__past" (click)="showHistory()">
+          Past<span class="app__past-more"> draws</span>
+        </button>
+      } @else {
+        <span class="app__header-slot"></span>
+      }
+    </header>
+
+    <div class="mat">
+      <main class="app__main">
+        @switch (view()) {
+          @case ('ask') {
+            <app-question (draw)="onDraw($event)" />
+          }
+          @case ('reading') {
+            @if (draw(); as d) {
+              <app-reading [draw]="d" [question]="question()" (again)="askAgain()" />
+            }
+          }
+          @case ('history') {
+            <app-history (back)="askAgain()" />
+          }
+          @case ('looks') {
+            <app-looks (back)="askAgain()" />
+          }
+        }
+      </main>
+    </div>
+  </div>
+</div>

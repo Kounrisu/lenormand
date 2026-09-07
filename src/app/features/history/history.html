@@ -1,21 +1,25 @@
-<div class="history panel">
-  <h2>📜 Your readings</h2>
+<div class="history">
+  <h2>Past draws</h2>
 
   @if (readingsService.loading()) {
-    <p class="history__hint">Consulting the archives…</p>
+    <p class="history__hint">Loading…</p>
   } @else if (readingsService.loadError()) {
-    <p class="history__hint">Couldn't reach the archive right now.</p>
+    <p class="history__hint">Couldn't load past draws.</p>
   } @else if (readingsService.history().length === 0) {
-    <p class="history__hint">No readings yet — ask the cards a question first.</p>
+    <p class="history__hint">Nothing here yet. Shuffle the deck first.</p>
   } @else {
     <ul class="history__list">
       @for (reading of readingsService.history(); track reading.id) {
         <li class="history__item">
-          <span class="history__answer" [class.history__answer--yes]="reading.answer === 'yes'" [class.history__answer--no]="reading.answer === 'no'">
-            {{ reading.answer === 'yes' ? 'YES' : 'NO' }}
+          <span
+            class="history__answer"
+            [class.history__answer--yes]="reading.answer === 'yes'"
+            [class.history__answer--no]="reading.answer === 'no'"
+          >
+            {{ reading.answer === 'yes' ? 'Yes' : 'No' }}
           </span>
           <span class="history__body">
-            <span class="history__question">{{ reading.question ?? '(no question recorded)' }}</span>
+            <span class="history__question">{{ reading.question ?? 'No question written' }}</span>
             <span class="history__meta">
               Ring at {{ reading.ringPosition }} · {{ reading.createdAt | date: 'medium' }}
             </span>
@@ -25,5 +29,5 @@
     </ul>
   }
 
-  <button class="btn btn--ghost" (click)="back.emit()">🔮 New question</button>
+  <button type="button" class="btn btn--ghost" (click)="back.emit()">Back to the table</button>
 </div>

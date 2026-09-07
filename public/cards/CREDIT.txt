@@ -1,0 +1,16 @@
+Card faces are crops of Johann Kaspar Hechtel, Das Spiel der Hofnung (The Game of Hope), Nuremberg, 1799.
+Scan: Wikimedia Commons, public domain (artwork published before 1931).
+Source sheet: https://commons.wikimedia.org/wiki/File:Das_Spiel_der_Hofnung_(The_Game_of_Hope).png
+Original object: British Museum 1896,0501.495.
+
+Card back (cards/back.jpg) is an xAI Imagine photograph of a worn oxblood
+and gilt damask reverse, meant to sit on green baize with the 1799 faces.
+
+Table scenes (table/seat.jpg, table/pit.jpg) are overhead photographs of a
+wooden table and a green card mat. The pack is laid out on that mat in the
+picture. Extra cloths and backs live in table/cloth-*.jpg and backs/.
+
+Card sounds in public/sounds/ are Freesound CC0 recordings of real paper cards:
+- riffle-real.mp3 / shuffle.mp3 — SomeoneCool15 (https://freesound.org/people/SomeoneCool15/packs/23989/)
+- riffle-long.mp3 — 5ro4 (https://freesound.org/people/5ro4/sounds/611107/)
+- dealing.mp3 — SomeoneCool15 (https://freesound.org/people/SomeoneCool15/sounds/423769/)

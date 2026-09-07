@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { CARD_SYMBOLS } from '../../core/card-symbols';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import type { LenormandCard } from '../../core/models';
+import { ThemeService } from '../../core/theme.service';
 
 @Component({
   selector: 'app-card',
@@ -9,11 +9,10 @@ import type { LenormandCard } from '../../core/models';
   styleUrl: './card.scss',
 })
 export class CardComponent {
+  private readonly theme = inject(ThemeService);
+
   readonly card = input.required<LenormandCard>();
   readonly faceDown = input(false);
   readonly highlighted = input(false);
-
-  protected symbolFor(slug: string): string {
-    return CARD_SYMBOLS[slug] ?? '🂠';
-  }
+  protected readonly backSrc = this.theme.backSrc;
 }

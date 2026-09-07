@@ -25,14 +25,11 @@ among them, the answer is **Yes**. Otherwise, **No**.
 
 ## Card artwork
 
-Cards currently render as simple CSS/emoji placeholders (`src/app/core/card-symbols.ts`)
-rather than real deck scans. The plan is to swap in scans of the public-domain
-**"Das Spiel der Hofnung"** (1799) deck or an equivalent out-of-copyright 19th-century
-Lenormand deck — see
-[Wikimedia Commons — Category:Lenormand cards](https://commons.wikimedia.org/wiki/Category:Lenormand_cards).
-To swap in real art: drop 36 images under `public/cards/<slug>.jpg` (slugs are in
-`src/app/core/cards.data.ts`) and update `shared/card/card.html` to render an `<img>`
-instead of the emoji glyph.
+Faces are crops of Johann Kaspar Hechtel's **Das Spiel der Hofnung** (The Game of
+Hope), Nuremberg, 1799 — the public-domain ancestor of the Petit Lenormand. Scans
+live in `public/cards/<slug>.jpg`. Source sheet:
+[Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Das_Spiel_der_Hofnung_(The_Game_of_Hope).png)
+(British Museum object 1896,0501.495). See `public/cards/CREDIT.txt`.
 
 ## Local development
 

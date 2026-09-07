@@ -1,64 +1,70 @@
+:host {
+  display: block;
+  width: var(--card-w);
+  max-width: 100%;
+  height: var(--card-h);
+  aspect-ratio: 100 / 131;
+  flex: 0 0 auto;
+}
+
 .card {
+  width: 100%;
+  height: 100%;
+  perspective: 700px;
+}
+
+.card__inner {
   position: relative;
-  width: 4.4rem;
-  height: 6.6rem;
-  border-radius: 8px;
-  border: 1.5px solid var(--accent);
-  background: linear-gradient(160deg, #2d2347, #1a1327);
-  color: var(--text);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.15rem;
-  padding: 0.3rem;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-.card--highlighted {
-  border-color: var(--yes);
-  box-shadow:
-    0 0 0 3px rgba(63, 155, 107, 0.35),
-    0 6px 16px rgba(0, 0, 0, 0.4);
-  transform: translateY(-4px);
+.card--flipped .card__inner {
+  transform: rotateY(180deg);
 }
 
-.card__number {
+.card__face {
   position: absolute;
-  align-self: flex-start;
-  font-size: 0.55rem;
-  color: var(--muted);
-  margin: 0.1rem 0 0 0.15rem;
+  inset: 0;
+  border-radius: var(--card-radius);
+  backface-visibility: hidden;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(42, 18, 14, 0.45),
+    0 2px 4px rgba(20, 8, 4, 0.25),
+    0 14px 28px rgba(10, 6, 4, 0.45);
 }
 
-.card__symbol {
-  font-size: 1.6rem;
-  line-height: 1;
+.card__face--back {
+  background-color: var(--oxblood-back);
 }
 
-.card__name {
-  font-size: 0.55rem;
-  text-align: center;
-  color: var(--muted);
-  letter-spacing: 0.02em;
+.card__face--back .card__art {
+  transform: scale(1.1);
 }
 
-.card--back {
-  background: repeating-linear-gradient(
-    45deg,
-    #2d2347,
-    #2d2347 6px,
-    #1a1327 6px,
-    #1a1327 12px
-  );
-  border-color: rgba(212, 175, 55, 0.5);
+.card__face--front {
+  transform: rotateY(180deg);
+  background: var(--cream);
+  border: 1px solid rgba(28, 20, 16, 0.2);
 }
 
-.card__moon {
-  font-size: 1.6rem;
-  color: var(--accent);
-  opacity: 0.8;
+.card__art {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+
+.card--highlighted .card__inner {
+  transform: rotateY(180deg) translateY(-6px) scale(1.06);
+}
+
+.card--highlighted .card__face--front {
+  box-shadow:
+    0 0 0 2px var(--gold),
+    0 10px 28px rgba(224, 184, 74, 0.5);
 }

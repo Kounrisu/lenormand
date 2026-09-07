@@ -1,36 +1,67 @@
 <div class="reading">
   @if (question()) {
-    <p class="reading__question">“{{ question() }}”</p>
+    <p class="reading__question">{{ question() }}</p>
   }
 
-  <p class="reading__hint">The first {{ cutoff }} cards decide it — watch for the Ring 💍</p>
+  @if (draw().atCut) {
+    <p class="reading__hint">At the cut</p>
+    <div class="reading__cut">
+      <app-card [card]="draw().cutCard" [highlighted]="true" />
+    </div>
+  } @else {
+    <p class="reading__cut-note">The cut was the {{ draw().cutCard.name }}.</p>
 
-  <div class="reading__row">
-    @for (card of firstThirteen(); track card.number; let i = $index) {
-      <app-card
-        [card]="card"
-        [faceDown]="i >= revealedCount()"
-        [highlighted]="i < revealedCount() && card.number === 25"
-      />
-    }
-  </div>
-
-  @if (done()) {
-    <div class="reading__result" [class.reading__result--yes]="draw().answer === 'yes'" [class.reading__result--no]="draw().answer === 'no'">
-      <span class="reading__result-label">{{ draw().answer === 'yes' ? 'YES' : 'NO' }}</span>
-      <span class="reading__result-detail">
-        The Ring appeared at position {{ draw().ringPosition }}
-        @if (draw().answer === 'yes') {
-          — within the first {{ cutoff }}.
-        } @else {
-          — outside the first {{ cutoff }}.
+    <div class="pit">
+      <div class="stock" aria-hidden="true">
+        @for (i of stockLayers; track i) {
+          <span class="stock__layer card-back" [style.--i]="i"></span>
         }
-      </span>
+      </div>
+
+      <div class="tableau">
+        @for (card of firstThirteen(); track card.number; let i = $index) {
+          @if (i < revealedCount()) {
+            <div class="tableau__slot" [class.tableau__slot--in]="true">
+              <app-card
+                [card]="card"
+                [highlighted]="card.number === ringNumber"
+              />
+            </div>
+          }
+        }
+      </div>
+    </div>
+
+    @if (!done()) {
+      <p class="reading__hint">
+        Dealing
+        <button type="button" class="reading__skip" (click)="skipToEnd()">Turn them all</button>
+      </p>
+    }
+  }
+
+  @if (done() || draw().atCut) {
+    <div class="reading__result" [attr.aria-live]="'polite'">
+      <p
+        class="reading__verdict"
+        [class.reading__verdict--yes]="draw().answer === 'yes'"
+        [class.reading__verdict--no]="draw().answer === 'no'"
+      >
+        {{ draw().answer === 'yes' ? 'Yes' : 'No' }}
+      </p>
+      <p class="reading__detail">
+        @if (draw().atCut) {
+          The Ring was waiting at the cut — a yes at once.
+        } @else if (draw().answer === 'yes') {
+          The Ring came up {{ draw().ringPosition }} cards in.
+        } @else {
+          The Ring stayed in the pack, under the first {{ cutoff }}.
+        }
+      </p>
     </div>
 
     <div class="reading__actions">
-      <button class="btn btn--primary" (click)="again.emit()">🔮 Ask again</button>
-      <button class="btn btn--ghost" (click)="viewHistory.emit()">📜 History</button>
+      <button type="button" class="btn btn--primary" (click)="again.emit()">Play again</button>
     </div>
   }
 </div>
