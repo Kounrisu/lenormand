@@ -37,3 +37,6 @@ The frontend intentionally avoids accounts and PII, but still needs a small serv
 
 ## AI Notes
 This folder contains a real `.env`. Do not expose it. The intended data model is small and privacy-light; preserve that simplicity unless the product direction changes.
+
+## Timeline, Token Consumption & Roadmap
+See `../PROJECT_OVERVIEW.md` — the frontend and this backend shipped together as one product, one timeline, so that's tracked once at the project root rather than duplicated here.
