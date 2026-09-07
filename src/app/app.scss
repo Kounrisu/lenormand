@@ -78,24 +78,16 @@
   flex-direction: column;
   align-items: center;
   gap: 0.14rem;
-  padding: 0;
-  border: none;
-  background: none;
   font-family: Fraunces, ui-serif, Georgia, serif;
   line-height: 1;
   white-space: nowrap;
   color: var(--cream);
-  cursor: pointer;
   text-shadow:
     0 1px 2px rgba(20, 8, 4, 0.9),
     0 1px 12px rgba(20, 8, 4, 0.7);
   grid-column: 2;
   grid-row: 1;
   justify-self: center;
-}
-
-p.app__wordmark {
-  cursor: default;
 }
 
 .app__wordmark-name {
@@ -106,15 +98,27 @@ p.app__wordmark {
 }
 
 .app__wordmark-rite {
+  margin: 0;
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-family: Fraunces, ui-serif, Georgia, serif;
   font-size: 0.72rem;
   font-weight: 500;
   font-style: italic;
   font-optical-sizing: auto;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.14em;
   color: var(--gold);
+  cursor: pointer;
   text-shadow:
     0 1px 2px rgba(20, 8, 4, 0.9),
     0 0 16px rgba(224, 184, 74, 0.28);
+}
+
+.app__wordmark-rite:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .app__looks,

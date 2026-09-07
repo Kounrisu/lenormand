@@ -1,60 +1,52 @@
 <div class="app">
-  <div class="scene">
-    <div class="scene__stage">
-      <img class="scene__photo scene__photo--phone" src="table/seat.jpg" alt="" />
-      <img class="scene__photo scene__photo--desk" src="table/pit.jpg" alt="" />
+  @if (view() === 'about') {
+    <app-about (back)="askAgain()" />
+  } @else {
+    <div class="scene">
+      <div class="scene__stage">
+        <img class="scene__photo scene__photo--phone" src="table/seat.jpg" alt="" />
+        <img class="scene__photo scene__photo--desk" src="table/pit.jpg" alt="" />
 
-      <div class="mat">
-        <main class="app__main">
-          @switch (view()) {
-            @case ('ask') {
-              <app-question (draw)="onDraw($event)" />
-            }
-            @case ('reading') {
-              @if (draw(); as d) {
-                <app-reading [draw]="d" [question]="question()" (again)="askAgain()" />
+        <div class="mat">
+          <main class="app__main">
+            @switch (view()) {
+              @case ('ask') {
+                <app-question (draw)="onDraw($event)" />
+              }
+              @case ('reading') {
+                @if (draw(); as d) {
+                  <app-reading [draw]="d" [question]="question()" (again)="askAgain()" />
+                }
+              }
+              @case ('history') {
+                <app-history (back)="askAgain()" />
+              }
+              @case ('looks') {
+                <app-looks (back)="askAgain()" (about)="showAbout()" />
               }
             }
-            @case ('history') {
-              <app-history (back)="askAgain()" />
-            }
-            @case ('looks') {
-              <app-looks (back)="askAgain()" (about)="showAbout()" />
-            }
-            @case ('about') {
-              <app-about (back)="askAgain()" />
-            }
-          }
-        </main>
+          </main>
+        </div>
       </div>
-    </div>
 
-    <header class="app__header">
-      @if (view() !== 'looks') {
-        <button type="button" class="app__looks" (click)="showLooks()">Settings</button>
-      } @else {
-        <span class="app__header-slot"></span>
-      }
-      @if (view() !== 'about') {
-        <button type="button" class="app__wordmark" (click)="showAbout()">
-          <span class="app__wordmark-name">Lenormand</span>
-          <span class="app__wordmark-rite">yes or no</span>
-        </button>
-      } @else {
+      <header class="app__header">
+        @if (view() !== 'looks') {
+          <button type="button" class="app__looks" (click)="showLooks()">Settings</button>
+        } @else {
+          <span class="app__header-slot"></span>
+        }
         <p class="app__wordmark">
           <span class="app__wordmark-name">Lenormand</span>
-          <span class="app__wordmark-rite">yes or no</span>
+          <button type="button" class="app__wordmark-rite" (click)="showAbout()">Madame Lenormand</button>
         </p>
-      }
-      @if (view() === 'about') {
-        <button type="button" class="app__past" (click)="askAgain()">Back</button>
-      } @else if (view() !== 'history' && view() !== 'looks') {
-        <button type="button" class="app__past" (click)="showHistory()">
-          Past<span class="app__past-more"> draws</span>
-        </button>
-      } @else {
-        <span class="app__header-slot"></span>
-      }
-    </header>
-  </div>
+        @if (view() !== 'history' && view() !== 'looks') {
+          <button type="button" class="app__past" (click)="showHistory()">
+            Past<span class="app__past-more"> draws</span>
+          </button>
+        } @else {
+          <span class="app__header-slot"></span>
+        }
+      </header>
+    </div>
+  }
 </div>
