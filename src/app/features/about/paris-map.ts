@@ -32,9 +32,11 @@ const shopIcon = L.icon({
 export class ParisMapComponent implements AfterViewInit, OnDestroy {
   private readonly mapEl = viewChild.required<ElementRef<HTMLDivElement>>('mapEl');
   private map?: L.Map;
+  private resizeObserver?: ResizeObserver;
 
   ngAfterViewInit(): void {
-    const map = L.map(this.mapEl().nativeElement, {
+    const container = this.mapEl().nativeElement;
+    const map = L.map(container, {
       center: [SHOP_LAT, SHOP_LNG],
       zoom: 16,
       scrollWheelZoom: false,
@@ -49,9 +51,18 @@ export class ParisMapComponent implements AfterViewInit, OnDestroy {
     L.marker([SHOP_LAT, SHOP_LNG], { icon: shopIcon })
       .addTo(map)
       .bindPopup('5 rue de Tournon<br>Her shop and "cabinet", for about forty years.');
+
+    // Leaflet sizes its tile canvas once, at init, to whatever the container
+    // measured then. It has no way to know the container later grows (e.g. the
+    // page's max-width layout kicking in at a laptop's wider viewport), so
+    // without this the map keeps rendering at its original, smaller size —
+    // showing as a cropped view inside the now-larger frame.
+    this.resizeObserver = new ResizeObserver(() => map.invalidateSize());
+    this.resizeObserver.observe(container);
   }
 
   ngOnDestroy(): void {
+    this.resizeObserver?.disconnect();
     this.map?.remove();
   }
 }
