@@ -1,12 +1,22 @@
+:host {
+  display: block;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
 .reading {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  justify-content: center;
+  gap: 0.55rem;
   width: 100%;
+  height: 100%;
   max-width: none;
   margin: 0 auto;
   text-align: center;
+  overflow: hidden;
 }
 
 .reading__question {
@@ -160,8 +170,17 @@
 
 .reading__actions {
   display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
   margin-top: 0.35rem;
+}
+
+.reading__again-lede {
+  margin: 0;
+  font-family: Fraunces, ui-serif, Georgia, serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--muted);
+  text-shadow: 0 1px 10px rgba(20, 8, 4, 0.45);
 }

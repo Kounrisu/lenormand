@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
+import { PackService } from '../../core/pack.service';
 import { ThemeService } from '../../core/theme.service';
 
 @Component({
@@ -9,5 +10,11 @@ import { ThemeService } from '../../core/theme.service';
 })
 export class LooksComponent {
   protected readonly theme = inject(ThemeService);
+  protected readonly pack = inject(PackService);
   readonly back = output<void>();
+
+  protected freshPack(): void {
+    this.pack.newPack();
+    this.back.emit();
+  }
 }

@@ -17,6 +17,10 @@ export const BACKS: readonly ThemeOption[] = [
   { id: 'tartan', label: 'Tartan', src: '/backs/tartan.jpg' },
 ];
 
+export const FACES: readonly ThemeOption[] = [
+  { id: 'hope', label: 'Game of Hope', src: '/cards/ring.jpg' },
+];
+
 const STORAGE_KEY = 'lenormand.looks';
 const DEFAULT_CLOTH = 'baize';
 const DEFAULT_BACK = 'oxblood';
@@ -28,8 +32,10 @@ export class ThemeService {
 
   readonly cloths = CLOTHS;
   readonly backs = BACKS;
+  readonly faces = FACES;
   readonly cloth = computed(() => findOption(CLOTHS, this.clothId(), DEFAULT_CLOTH));
   readonly back = computed(() => findOption(BACKS, this.backId(), DEFAULT_BACK));
+  readonly face = computed(() => FACES[0]);
   readonly backSrc = computed(() => this.back().src.replace(/^\//, ''));
 
   constructor() {

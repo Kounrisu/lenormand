@@ -18,7 +18,15 @@ import {
   type DrawResult,
   type ShuffleStyle,
 } from '../../core/deck';
-import { playCut, playShuffle, warmSounds } from '../../core/sounds';
+import {
+  playCut,
+  playGather,
+  playLay,
+  playPress,
+  playShuffle,
+  playTap,
+  warmSounds,
+} from '../../core/sounds';
 import type { LenormandCard } from '../../core/models';
 
 export interface DrawnEvent {
@@ -29,8 +37,13 @@ export interface DrawnEvent {
 type Phase = 'idle' | 'shuffling' | 'shuffled' | 'mixing' | 'asking' | 'cut-reveal';
 
 const DECK_SIZE = LENORMAND_CARDS.length;
-const MIX_CUT_MS = 380;
+const MIX_LAY_MS = 980;
+const MIX_CUT_MS = 1580;
+const MIX_UNDER_AT = 360;
+const ASK_LAY_MS = 720;
 const ASK_REVEAL_MS = 1100;
+
+type MixStep = 'lay' | 'spread' | 'cut';
 
 const SHUFFLE_MS: Record<ShuffleStyle, number> = {
   riffle: 1600,
@@ -67,6 +80,8 @@ export class QuestionComponent implements OnDestroy {
   protected readonly cutFaceDown = signal(true);
   protected readonly pack = signal<LenormandCard[]>([]);
   protected readonly method = signal<ShuffleStyle>('riffle');
+  protected readonly laying = signal(false);
+  protected readonly mixStep = signal<MixStep>('spread');
   protected readonly washBits = signal<{ i: number; x: number; y: number; r: number }[]>([]);
   protected readonly reducedMotion = prefersReducedMotion();
   protected readonly ringNumber = RING_CARD_NUMBER;
@@ -78,6 +93,9 @@ export class QuestionComponent implements OnDestroy {
   private shuffleTimer?: ReturnType<typeof setTimeout>;
 
   protected tilt(index: number): string {
+    if (this.phase() === 'mixing') {
+      return `${((index * 7) % 5) - 2}deg`;
+    }
     return `${((index * 13) % 9) - 4}deg`;
   }
 
@@ -87,6 +105,7 @@ export class QuestionComponent implements OnDestroy {
 
   protected pickMethod(style: ShuffleStyle): void {
     this.method.set(style);
+    playTap();
   }
 
   protected shuffleAgain(): void {
@@ -101,10 +120,20 @@ export class QuestionComponent implements OnDestroy {
     if (this.phase() !== 'idle' && this.phase() !== 'shuffled') {
       return;
     }
+    this.clearTimers();
     this.cutDepth.set(0);
+    this.mixStep.set('lay');
+    this.laying.set(true);
     this.pack.set([...this.packService.cards()]);
     this.cutFaceDown.set(true);
+    playPress();
+    playLay();
     this.phase.set('mixing');
+    const delay = this.reducedMotion ? 0 : MIX_LAY_MS;
+    this.shuffleTimer = setTimeout(() => {
+      this.laying.set(false);
+      this.mixStep.set('spread');
+    }, delay);
   }
 
   /** The real cut — the tapped card is the answer. */
@@ -112,10 +141,17 @@ export class QuestionComponent implements OnDestroy {
     if (this.phase() !== 'idle' && this.phase() !== 'shuffled') {
       return;
     }
+    this.clearTimers();
     this.cutDepth.set(0);
+    this.mixStep.set('spread');
+    this.laying.set(true);
     this.pack.set([...this.packService.cards()]);
     this.cutFaceDown.set(true);
+    playPress();
+    playLay();
     this.phase.set('asking');
+    const delay = this.reducedMotion ? 0 : ASK_LAY_MS;
+    this.shuffleTimer = setTimeout(() => this.laying.set(false), delay);
   }
 
   protected gather(): void {
@@ -124,6 +160,8 @@ export class QuestionComponent implements OnDestroy {
     }
     this.clearTimers();
     this.cutDepth.set(0);
+    this.mixStep.set('spread');
+    this.laying.set(false);
     this.pack.set([]);
     this.cutFaceDown.set(true);
     this.phase.set('idle');
@@ -156,21 +194,33 @@ export class QuestionComponent implements OnDestroy {
   }
 
   private mixAt(position: number): void {
-    if (this.cutDepth() > 0) {
+    if (this.cutDepth() > 0 || this.mixStep() === 'cut') {
       return;
     }
     const depth = Math.min(DECK_SIZE, Math.max(1, position));
     this.cutDepth.set(depth);
+    this.mixStep.set('cut');
+    this.laying.set(false);
     playCut();
     const { deck } = cutAt(this.packService.cards(), depth);
     this.packService.set(deck);
-    const delay = this.reducedMotion ? 0 : MIX_CUT_MS;
+    if (this.reducedMotion) {
+      this.finishMix();
+      return;
+    }
     this.shuffleTimer = setTimeout(() => {
-      this.cutDepth.set(0);
-      this.pack.set([]);
-      this.cutFaceDown.set(true);
-      this.phase.set('idle');
-    }, delay);
+      playGather();
+      this.shuffleTimer = setTimeout(() => this.finishMix(), MIX_CUT_MS - MIX_UNDER_AT);
+    }, MIX_UNDER_AT);
+  }
+
+  private finishMix(): void {
+    this.mixStep.set('spread');
+    this.laying.set(false);
+    this.cutDepth.set(0);
+    this.pack.set([]);
+    this.cutFaceDown.set(true);
+    this.phase.set('idle');
   }
 
   ngOnDestroy(): void {

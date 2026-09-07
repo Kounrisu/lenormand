@@ -93,6 +93,22 @@ export function playCut(): void {
   playSnippet(files.dealing, 0.2, 280, 0.9);
 }
 
+export function playTap(): void {
+  playSnippet(files.dealing, 0.05 + Math.random() * 10, 110, 0.52);
+}
+
+export function playPress(): void {
+  playSnippet(files.dealing, 0.12, 200, 0.74);
+}
+
+export function playLay(): void {
+  playFile(files.dealing, { volume: 0.82, rate: 1.04, maxMs: 1000 });
+}
+
+export function playGather(): void {
+  playSnippet(files.dealing, 0.8, 520, 0.82);
+}
+
 export function warmSounds(): void {
   load(files.riffle);
   load(files.riffleLong);

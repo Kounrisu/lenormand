@@ -1,7 +1,7 @@
 {
   "name": "Lenormand — yes or no",
   "short_name": "Yes or no",
-  "description": "Lenormand yes or no. Shuffle, cut, and look for the Ring.",
+  "description": "Lenormand yes or no. Shuffle, cut, and seek an answer from the pack.",
   "display": "standalone",
   "theme_color": "#0c3a2c",
   "background_color": "#0c3a2c",

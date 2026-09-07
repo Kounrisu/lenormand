@@ -45,13 +45,13 @@
             Hold the question. Don’t rush the shuffle.
           }
           @case ('shuffled') {
-            Shuffle again, or split the pack yourself, then ask.
+            Shuffle again, split the pack yourself, or seek a yes or no.
           }
           @default {
             @if (factory()) {
-              Hold a yes-or-no question. Shuffle, or split the pack by hand, then ask.
+              Hold a yes-or-no. Shuffle, or split the pack by hand, then seek.
             } @else {
-              The pack is as you left it. Shuffle, split it yourself, or ask.
+              The pack is as you left it. Shuffle, split it yourself, or seek a yes or no.
             }
           }
         }
@@ -76,16 +76,14 @@
 
         @if (phase() === 'idle' || phase() === 'shuffled') {
           <p class="question__or">or</p>
-          <button type="button" class="question__split" (click)="spreadToMix()">Split it yourself</button>
-          <button type="button" class="btn btn--primary question__ask" (click)="spreadToAsk()">
-            Yes or no?
+          <button type="button" class="btn btn--ghost question__deed" (click)="spreadToMix()">
+            Split it yourself
+          </button>
+          <button type="button" class="btn btn--primary question__deed" (click)="spreadToAsk()">
+            Seek a yes or no
           </button>
         }
       </div>
-
-      @if ((phase() === 'idle' || phase() === 'shuffled') && !factory()) {
-        <button type="button" class="question__shuffle" (click)="newPack()">New pack</button>
-      }
 
       @if (phase() === 'idle' || phase() === 'shuffled') {
         <button
@@ -123,23 +121,38 @@
     <p class="question__lede">
       @if (phase() === 'cut-reveal') {
         {{ pack()[cutDepth() - 1]?.name }}
+      } @else if (phase() === 'mixing' && mixStep() === 'cut') {
+        The top goes under.
+      } @else if (phase() === 'mixing' && mixStep() === 'lay') {
+        The pack spreads on the cloth.
       } @else if (phase() === 'mixing') {
-        Tap where you split. Nothing turns over.
+        Tap where you cut. Nothing turns. The top goes under the rest.
       } @else {
         Tap the cut. That card answers.
       }
     </p>
 
-    <div class="spread" role="list">
+    <div
+      class="spread"
+      role="list"
+      [class.spread--ribbon]="phase() === 'mixing'"
+      [class.spread--laying]="laying()"
+      [class.spread--cutting]="phase() === 'mixing' && mixStep() === 'cut'"
+      [style.--n]="pack().length"
+      [style.--before]="cutDepth()"
+      [style.--after]="pack().length - cutDepth()"
+    >
       @for (card of pack(); track card.number; let i = $index) {
         <button
           type="button"
           class="spread__slot"
           role="listitem"
           [class.spread__slot--chosen]="cutDepth() > 0 && i + 1 === cutDepth()"
+          [class.spread__slot--before]="cutDepth() > 0 && i + 1 <= cutDepth()"
+          [class.spread__slot--after]="cutDepth() > 0 && i + 1 > cutDepth()"
           [style.--r]="tilt(i)"
           [style.--z]="i"
-          [disabled]="phase() === 'cut-reveal' || (phase() === 'mixing' && cutDepth() > 0)"
+          [disabled]="phase() === 'cut-reveal' || (phase() === 'mixing' && mixStep() !== 'spread')"
           (click)="chooseCut(i + 1)"
         >
           <app-card
@@ -151,7 +164,7 @@
       }
     </div>
 
-    @if (phase() === 'mixing' || phase() === 'asking') {
+    @if ((phase() === 'mixing' || phase() === 'asking') && mixStep() !== 'cut' && cutDepth() === 0) {
       <button type="button" class="question__shuffle" (click)="gather()">Back to the pack</button>
     }
   }

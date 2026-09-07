@@ -13,7 +13,7 @@ import { CardComponent } from '../../shared/card/card';
 import { ReadingsService } from '../../core/readings.service';
 import { RING_CARD_NUMBER, YES_NO_CUTOFF } from '../../core/cards.data';
 import type { DrawResult } from '../../core/deck';
-import { playDeal } from '../../core/sounds';
+import { playDeal, playPress } from '../../core/sounds';
 
 const REVEAL_MS = 320;
 const RING_BEAT_MS = 900;
@@ -59,6 +59,11 @@ export class ReadingComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed = true;
     clearTimeout(this.timer);
+  }
+
+  protected askOnceMore(): void {
+    playPress();
+    this.again.emit();
   }
 
   protected skipToEnd(): void {
