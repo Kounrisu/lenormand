@@ -22,7 +22,7 @@
                 <app-history (back)="askAgain()" />
               }
               @case ('looks') {
-                <app-looks (back)="askAgain()" (about)="showAbout()" />
+                <app-looks (back)="askAgain()" />
               }
             }
           </main>
@@ -30,10 +30,10 @@
       </div>
 
       <header class="app__header">
-        @if (view() !== 'looks') {
-          <button type="button" class="app__looks" (click)="showLooks()">Settings</button>
+        @if (view() === 'looks') {
+          <button type="button" class="app__looks" (click)="askAgain()">← Table</button>
         } @else {
-          <span class="app__header-slot"></span>
+          <button type="button" class="app__looks" (click)="showLooks()">Settings</button>
         }
         <p class="app__wordmark">
           <span class="app__wordmark-name">Lenormand</span>

@@ -163,6 +163,18 @@
   box-shadow: var(--shadow-soft);
 }
 
+.map-external {
+  display: inline-block;
+  margin-top: 0.6rem;
+  color: var(--brass);
+  font-size: 0.88rem;
+  text-decoration: none;
+}
+
+.map-external:hover {
+  text-decoration: underline;
+}
+
 .cards-head {
   display: flex;
   align-items: baseline;
