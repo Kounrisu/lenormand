@@ -1,0 +1,81 @@
+<div class="about">
+  <div class="about__bar">
+    <h2>The pack</h2>
+  </div>
+
+  <div class="about__scroll">
+    <p class="about__lede">
+      A famous Paris reader, a Nuremberg parlour game, and thirty-six pictures that picked
+      up her name after she was gone.
+    </p>
+
+    <h3>Who she was</h3>
+    <p>
+      Marie-Anne-Adélaïde Lenormand was born on 27 May 1772 in Alençon, in Normandy. Her
+      father was a draper. She was orphaned young, sent to a convent school, and left for
+      Paris as a teenager.
+    </p>
+    <p>
+      She kept a bookseller’s shop at 5 rue de Tournon, in the faubourg Saint-Germain — a
+      legal front, because fortune-telling was not. Under that sign she read ordinary
+      French playing cards for a public that ran from actors to, so the stories go,
+      Joséphine and the men of the Revolution. She never married. She died in Paris on
+      25 June 1843 and is buried at Père-Lachaise.
+    </p>
+    <p>She was famous. She did not invent this pack.</p>
+
+    <h3>Where the game started</h3>
+    <p>
+      The thirty-six pictures on this table were drawn for a German parlour game,
+      <em>Das Spiel der Hofnung</em> — The Game of Hope. Johann Kaspar Hechtel of
+      Nuremberg designed it. Gustav Philipp Jakob Bieling printed it there around 1799
+      as a race game: you laid the cards in six rows of six and moved with dice. The
+      same sheet could be used as a 36-card piquet pack. Hechtel died of smallpox that
+      December, aged twenty-eight.
+    </p>
+    <p>
+      The box already carried a French title as well as a German one. It was meant to
+      travel. The faces in this game are crops of that 1799 sheet, now in the British
+      Museum.
+    </p>
+
+    <h3>Why her name is on it</h3>
+    <p>
+      After she died, German publishers needed a name people already knew. Around 1846,
+      J. F. August Reiff of Koblenz reissued Hechtel’s figures as the fortune-telling
+      pack of “Mademoiselle Lenormand.” The tale that a pack was found among her things
+      is advertising. She had used plain playing cards.
+    </p>
+    <p>
+      The Petit Lenormand stuck. French houses printed it later; the pictures spread
+      through Europe and then much further. The yes-or-no on this table is a later
+      French cut, not her salon trick — but it uses the same thirty-six.
+    </p>
+
+    <h3>The thirty-six</h3>
+    <p class="about__hint">
+      Each card carries a small scene and a playing-card inset. The notes are ordinary
+      table-talk, not a law.
+    </p>
+
+    <ol class="about__cards">
+      @for (card of cards; track card.number) {
+        <li class="about__card">
+          <img
+            class="about__face"
+            [src]="'cards/' + card.slug + '.jpg'"
+            [alt]="card.number + '. ' + card.name"
+          />
+          <div class="about__card-copy">
+            <p class="about__card-name">
+              <span class="about__num">{{ card.number }}</span>
+              {{ card.name }}
+              <span class="about__pip">{{ card.playingCard }}</span>
+            </p>
+            <p class="about__meaning">{{ card.meaning }}</p>
+          </div>
+        </li>
+      }
+    </ol>
+  </div>
+</div>

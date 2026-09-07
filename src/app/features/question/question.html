@@ -126,7 +126,7 @@
       } @else if (phase() === 'mixing' && mixStep() === 'lay') {
         The pack spreads on the cloth.
       } @else if (phase() === 'mixing') {
-        Tap where you cut. Nothing turns. The top goes under the rest.
+        Tap where you cut. The top goes under the rest.
       } @else {
         Tap the cut. That card answers.
       }
@@ -135,7 +135,6 @@
     <div
       class="spread"
       role="list"
-      [class.spread--ribbon]="phase() === 'mixing'"
       [class.spread--laying]="laying()"
       [class.spread--cutting]="phase() === 'mixing' && mixStep() === 'cut'"
       [style.--n]="pack().length"
@@ -152,6 +151,8 @@
           [class.spread__slot--after]="cutDepth() > 0 && i + 1 > cutDepth()"
           [style.--r]="tilt(i)"
           [style.--z]="i"
+          [style.--col]="colOf(i)"
+          [style.--row]="rowOf(i)"
           [disabled]="phase() === 'cut-reveal' || (phase() === 'mixing' && mixStep() !== 'spread')"
           (click)="chooseCut(i + 1)"
         >

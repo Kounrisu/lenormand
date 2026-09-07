@@ -9,8 +9,6 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  display: grid;
-  place-items: center;
   /* seat.jpg (720×1280) */
   --play-top: 24%;
   --play-left: 14%;
@@ -19,8 +17,17 @@
 }
 
 .scene__stage {
-  position: relative;
-  flex-shrink: 0;
+  /* Centered like a `background-size: cover` image: sized to fully cover the
+     viewport at the photo's native aspect ratio, then centered so any excess
+     (whichever axis overflows) is cropped evenly on both sides. A grid with
+     `place-items: center` does NOT do this — an unconstrained implicit grid
+     track auto-sizes to fit its item, so there is nothing to center within,
+     and the whole stage (plus everything positioned relative to it, like
+     `.mat`) pins to the top-left and overflows off-screen on one side only. */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: max(100vw, calc(100dvh * 9 / 16));
   height: max(100dvh, calc(100vw * 16 / 9));
 }
@@ -71,17 +78,24 @@
   flex-direction: column;
   align-items: center;
   gap: 0.14rem;
+  padding: 0;
+  border: none;
+  background: none;
   font-family: Fraunces, ui-serif, Georgia, serif;
   line-height: 1;
   white-space: nowrap;
   color: var(--cream);
-  pointer-events: none;
+  cursor: pointer;
   text-shadow:
     0 1px 2px rgba(20, 8, 4, 0.9),
     0 1px 12px rgba(20, 8, 4, 0.7);
   grid-column: 2;
   grid-row: 1;
   justify-self: center;
+}
+
+p.app__wordmark {
+  cursor: default;
 }
 
 .app__wordmark-name {

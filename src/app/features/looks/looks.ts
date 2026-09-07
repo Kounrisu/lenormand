@@ -12,6 +12,7 @@ export class LooksComponent {
   protected readonly theme = inject(ThemeService);
   protected readonly pack = inject(PackService);
   readonly back = output<void>();
+  readonly about = output<void>();
 
   protected freshPack(): void {
     this.pack.newPack();

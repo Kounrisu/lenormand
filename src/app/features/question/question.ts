@@ -93,10 +93,24 @@ export class QuestionComponent implements OnDestroy {
   private shuffleTimer?: ReturnType<typeof setTimeout>;
 
   protected tilt(index: number): string {
-    if (this.phase() === 'mixing') {
-      return `${((index * 7) % 5) - 2}deg`;
-    }
     return `${((index * 13) % 9) - 4}deg`;
+  }
+
+  protected colOf(index: number): number {
+    return index % this.spreadCols();
+  }
+
+  protected rowOf(index: number): number {
+    return Math.floor(index / this.spreadCols());
+  }
+
+  private spreadCols(): number {
+    return (
+      typeof globalThis.matchMedia === 'function' &&
+      globalThis.matchMedia('(min-width: 800px)').matches
+        ? 9
+        : 6
+    );
   }
 
   protected toggleNote(): void {
@@ -194,10 +208,11 @@ export class QuestionComponent implements OnDestroy {
   }
 
   private mixAt(position: number): void {
-    if (this.cutDepth() > 0 || this.mixStep() === 'cut') {
+    if (this.cutDepth() > 0 || this.mixStep() !== 'spread') {
       return;
     }
     const depth = Math.min(DECK_SIZE, Math.max(1, position));
+    this.clearTimers();
     this.cutDepth.set(depth);
     this.mixStep.set('cut');
     this.laying.set(false);

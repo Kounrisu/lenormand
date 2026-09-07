@@ -19,7 +19,10 @@
               <app-history (back)="askAgain()" />
             }
             @case ('looks') {
-              <app-looks (back)="askAgain()" />
+              <app-looks (back)="askAgain()" (about)="showAbout()" />
+            }
+            @case ('about') {
+              <app-about (back)="askAgain()" />
             }
           }
         </main>
@@ -32,11 +35,20 @@
       } @else {
         <span class="app__header-slot"></span>
       }
-      <p class="app__wordmark">
-        <span class="app__wordmark-name">Lenormand</span>
-        <span class="app__wordmark-rite">yes or no</span>
-      </p>
-      @if (view() !== 'history' && view() !== 'looks') {
+      @if (view() !== 'about') {
+        <button type="button" class="app__wordmark" (click)="showAbout()">
+          <span class="app__wordmark-name">Lenormand</span>
+          <span class="app__wordmark-rite">yes or no</span>
+        </button>
+      } @else {
+        <p class="app__wordmark">
+          <span class="app__wordmark-name">Lenormand</span>
+          <span class="app__wordmark-rite">yes or no</span>
+        </p>
+      }
+      @if (view() === 'about') {
+        <button type="button" class="app__past" (click)="askAgain()">Back</button>
+      } @else if (view() !== 'history' && view() !== 'looks') {
         <button type="button" class="app__past" (click)="showHistory()">
           Past<span class="app__past-more"> draws</span>
         </button>

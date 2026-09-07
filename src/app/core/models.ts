@@ -3,6 +3,7 @@ export interface LenormandCard {
   readonly name: string;
   readonly slug: string;
   readonly playingCard: string;
+  readonly meaning: string;
 }
 
 export type Answer = 'yes' | 'no';
