@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, output, signal } from '@angular/core';
 import { LENORMAND_CARDS } from '../../core/cards.data';
 import { ParisMapComponent } from './paris-map';
+import { LocaleService } from '../../core/locale.service';
 
 const LARGE_CARDS_KEY = 'lenormand.aboutLargeCards';
 
@@ -14,6 +15,8 @@ const LARGE_CARDS_KEY = 'lenormand.aboutLargeCards';
 export class AboutComponent {
   readonly back = output<void>();
   protected readonly cards = LENORMAND_CARDS;
+  protected readonly locale = inject(LocaleService);
+  protected readonly t = this.locale.t;
 
   protected readonly largeCards = signal(this.readStoredPreference());
 

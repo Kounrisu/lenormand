@@ -31,17 +31,38 @@
 
       <header class="app__header">
         @if (view() === 'looks') {
-          <button type="button" class="app__looks" (click)="askAgain()">← Table</button>
+          <button type="button" class="app__looks" (click)="askAgain()">{{ t('header.table') }}</button>
         } @else {
-          <button type="button" class="app__looks" (click)="showLooks()">Settings</button>
+          <button type="button" class="app__looks" (click)="showLooks()">{{ t('header.settings') }}</button>
         }
         <p class="app__wordmark">
           <span class="app__wordmark-name">Lenormand</span>
-          <button type="button" class="app__wordmark-rite" (click)="showAbout()">Madame Lenormand</button>
+          <button type="button" class="app__wordmark-rite" (click)="showAbout()">{{ t('header.about') }}</button>
+          @if (view() === 'ask') {
+            <button
+              type="button"
+              class="app__new-deck"
+              [class.app__new-deck--dim]="pack.isFactory()"
+              [attr.aria-label]="t('header.newDeck')"
+              [title]="t('header.newDeck')"
+              (click)="newDeck()"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path
+                  d="M12 3a9 9 0 1 0 9 9"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                />
+                <path d="M12 3v5h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+          }
         </p>
         @if (view() !== 'history' && view() !== 'looks') {
           <button type="button" class="app__past" (click)="showHistory()">
-            Past<span class="app__past-more"> draws</span>
+            {{ t('header.past') }}<span class="app__past-more">{{ t('header.pastMore') }}</span>
           </button>
         } @else {
           <span class="app__header-slot"></span>
@@ -56,18 +77,18 @@
           [class.result-sheet__verdict--yes]="d.answer === 'yes'"
           [class.result-sheet__verdict--no]="d.answer === 'no'"
         >
-          {{ d.answer === 'yes' ? 'Yes' : 'No' }}
+          {{ d.answer === 'yes' ? t('result.yes') : t('result.no') }}
         </p>
         <p class="result-sheet__detail">
           @if (d.atCut) {
-            The Ring was waiting at the cut — a yes at once.
+            {{ t('result.atCut') }}
           } @else if (d.answer === 'yes') {
-            The Ring came up {{ d.ringPosition }} cards in.
+            {{ t('result.ringPosition', d.ringPosition) }}
           } @else {
-            The Ring stayed in the pack, under the first 13.
+            {{ t('result.noRing') }}
           }
         </p>
-        <button type="button" class="btn btn--primary" (click)="askAgain()">← Back to the table</button>
+        <button type="button" class="btn btn--primary" (click)="askAgain()">{{ t('result.back') }}</button>
       </div>
     }
   }

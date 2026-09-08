@@ -1,7 +1,7 @@
 <div class="page">
   <header class="page__bar">
-    <button type="button" class="page__back" (click)="back.emit()">← Table</button>
-    <p class="page__crumb">Madame Lenormand</p>
+    <button type="button" class="page__back" (click)="back.emit()">{{ t('about.back') }}</button>
+    <p class="page__crumb">{{ t('about.crumb') }}</p>
     <span class="page__spacer"></span>
   </header>
 
@@ -9,53 +9,37 @@
     <section class="hero">
       <img class="hero__portrait" src="portraits/court-of-napoleon.jpg" alt="Engraved portrait of Marie-Anne Lenormand, 1858" />
       <div class="hero__text">
-        <p class="hero__kicker">The pack, and the woman it was named for</p>
-        <h1>Marie-Anne Lenormand</h1>
-        <p class="hero__lede">
-          A famous Paris reader, a Nuremberg parlour game, and thirty-six pictures that picked
-          up her name after she was gone.
-        </p>
+        <p class="hero__kicker">{{ t('about.kicker') }}</p>
+        <h1>{{ t('about.title') }}</h1>
+        <p class="hero__lede">{{ t('about.lede') }}</p>
       </div>
     </section>
 
     <section class="story">
-      <h2>Who she was</h2>
-      <p>
-        Marie-Anne-Adélaïde Lenormand was born on 27 May 1772 in Alençon, in Normandy. Her
-        father was a draper. She was orphaned young, sent to a convent school, and left for
-        Paris as a teenager.
-      </p>
-      <p>
-        She kept a bookseller's shop at 5 rue de Tournon, in the faubourg Saint-Germain — a
-        legal front, because fortune-telling was not. Under that sign she read ordinary French
-        playing cards for a public that ran from actors to, so the stories go, Joséphine and
-        the men of the Revolution. She never married. She died in Paris on 25 June 1843 and is
-        buried at Père-Lachaise.
-      </p>
-      <p class="story__aside">She was famous. She did not invent this pack.</p>
+      <h2>{{ t('about.whoTitle') }}</h2>
+      <p>{{ t('about.who1') }}</p>
+      <p>{{ t('about.who2') }}</p>
+      <p class="story__aside">{{ t('about.aside') }}</p>
 
       <div class="gallery">
         <figure class="gallery__item">
           <img src="portraits/ledoux-portrait.jpg" alt="Oil portrait of Mademoiselle Lenormand by Jeanne-Philiberte Ledoux" />
-          <figcaption>Jeanne-Philiberte Ledoux, oil portrait, early 1800s</figcaption>
+          <figcaption>{{ t('about.gallery1') }}</figcaption>
         </figure>
         <figure class="gallery__item">
           <img src="portraits/palmist.jpg" alt="Illustration of Le Normand reading a palm, 1827" />
-          <figcaption>"The palmist Le Normand," 1827</figcaption>
+          <figcaption>{{ t('about.gallery2') }}</figcaption>
         </figure>
         <figure class="gallery__item">
           <img src="portraits/arrest.jpg" alt="Engraving of Mademoiselle Lenormand's 1809 arrest" />
-          <figcaption>Frontispiece of her memoir of the 1809 arrest, 1814</figcaption>
+          <figcaption>{{ t('about.gallery3') }}</figcaption>
         </figure>
       </div>
     </section>
 
     <section class="story">
-      <h2>Her address in Paris</h2>
-      <p>
-        For about forty years she read cards at 5 rue de Tournon, a short walk from the
-        Luxembourg Palace — the marker below sits on that address today.
-      </p>
+      <h2>{{ t('about.addressTitle') }}</h2>
+      <p>{{ t('about.address1') }}</p>
       <div class="map-frame">
         <app-paris-map />
       </div>
@@ -65,66 +49,47 @@
         target="_blank"
         rel="noopener"
       >
-        Open in Google Maps ↗
+        {{ t('about.mapLink') }}
       </a>
     </section>
 
     <section class="story">
-      <h2>Where the game started</h2>
-      <p>
-        The thirty-six pictures on this table were drawn for a German parlour game,
-        <em>Das Spiel der Hofnung</em> — The Game of Hope. Johann Kaspar Hechtel of Nuremberg
-        designed it. Gustav Philipp Jakob Bieling printed it there around 1799 as a race game:
-        you laid the cards in six rows of six and moved with dice. The same sheet could be
-        used as a 36-card piquet pack. Hechtel died of smallpox that December, aged
-        twenty-eight.
-      </p>
-      <p>
-        The box already carried a French title as well as a German one. It was meant to
-        travel. The faces in this game are crops of that 1799 sheet, now in the British
-        Museum.
-      </p>
+      <h2>{{ t('about.gameTitle') }}</h2>
+      <p>{{ t('about.game1') }}</p>
+      <p>{{ t('about.game2') }}</p>
     </section>
 
     <section class="story">
-      <h2>Why her name is on it</h2>
-      <p>
-        After she died, German publishers needed a name people already knew. Around 1846,
-        J. F. August Reiff of Koblenz reissued Hechtel's figures as the fortune-telling pack of
-        "Mademoiselle Lenormand." The tale that a pack was found among her things is
-        advertising. She had used plain playing cards.
-      </p>
-      <p>
-        The Petit Lenormand stuck. French houses printed it later; the pictures spread through
-        Europe and then much further. The yes-or-no on this table is a later French cut, not
-        her salon trick — but it uses the same thirty-six.
-      </p>
+      <h2>{{ t('about.nameTitle') }}</h2>
+      <p>{{ t('about.name1') }}</p>
+      <p>{{ t('about.name2') }}</p>
     </section>
 
     <section class="story">
       <div class="cards-head">
-        <h2>The thirty-six</h2>
+        <h2>{{ t('about.cardsTitle') }}</h2>
         <label class="size-toggle">
           <input type="checkbox" [checked]="largeCards()" (change)="toggleCardSize()" />
-          <span>Bigger photos</span>
+          <span>{{ t('about.biggerPhotos') }}</span>
         </label>
       </div>
-      <p class="story__hint">
-        Each card carries a small scene and a playing-card inset. The notes are ordinary
-        table-talk, not a law.
-      </p>
+      <p class="story__hint">{{ t('about.cardsHint') }}</p>
 
       <ol class="cards" [class.cards--large]="largeCards()">
         @for (card of cards; track card.number) {
           <li class="cards__item">
-            <img class="cards__face" [src]="'cards/' + card.slug + '.jpg'" [alt]="card.number + '. ' + card.name" />
+            <img
+              class="cards__face"
+              [src]="'cards/' + card.slug + '.jpg'"
+              [alt]="card.number + '. ' + (locale.isFr() ? card.nameFr : card.name)"
+            />
             <div class="cards__copy">
               <p class="cards__name">
                 <span class="cards__num">{{ card.number }}</span>
-                {{ card.name }}
+                {{ locale.isFr() ? card.nameFr : card.name }}
                 <span class="cards__pip">{{ card.playingCard }}</span>
               </p>
-              <p class="cards__meaning">{{ card.meaning }}</p>
+              <p class="cards__meaning">{{ locale.isFr() ? card.meaningFr : card.meaning }}</p>
             </div>
           </li>
         }

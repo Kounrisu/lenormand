@@ -11,22 +11,9 @@ import { FormsModule } from '@angular/forms';
 import { CardComponent } from '../../shared/card/card';
 import { LENORMAND_CARDS, RING_CARD_NUMBER } from '../../core/cards.data';
 import { PackService } from '../../core/pack.service';
-import {
-  cutAt,
-  shuffleWith,
-  readingFromCut,
-  type DrawResult,
-  type ShuffleStyle,
-} from '../../core/deck';
-import {
-  playCut,
-  playGather,
-  playLay,
-  playPress,
-  playShuffle,
-  playTap,
-  warmSounds,
-} from '../../core/sounds';
+import { LocaleService } from '../../core/locale.service';
+import { cutAt, casinoShuffle, readingFromCut, type DrawResult } from '../../core/deck';
+import { playCut, playGather, playLay, playPress, playShuffle, warmSounds } from '../../core/sounds';
 import type { LenormandCard } from '../../core/models';
 
 export interface DrawnEvent {
@@ -37,6 +24,7 @@ export interface DrawnEvent {
 type Phase = 'idle' | 'shuffling' | 'shuffled' | 'mixing' | 'asking' | 'cut-reveal';
 
 const DECK_SIZE = LENORMAND_CARDS.length;
+const SHUFFLE_MS = 3000;
 const MIX_LAY_MS = 980;
 const MIX_CUT_MS = 1580;
 const MIX_UNDER_AT = 360;
@@ -44,22 +32,6 @@ const ASK_LAY_MS = 720;
 const ASK_REVEAL_MS = 1100;
 
 type MixStep = 'lay' | 'spread' | 'cut';
-
-const SHUFFLE_MS: Record<ShuffleStyle, number> = {
-  riffle: 1600,
-  overhand: 1800,
-  strip: 1700,
-  wash: 2200,
-  casino: 3000,
-};
-
-export const SHUFFLE_METHODS: { readonly id: ShuffleStyle; readonly label: string }[] = [
-  { id: 'riffle', label: 'Riffle' },
-  { id: 'overhand', label: 'Overhand' },
-  { id: 'strip', label: 'Strip' },
-  { id: 'wash', label: 'Wash' },
-  { id: 'casino', label: 'Casino' },
-];
 
 @Component({
   selector: 'app-question',
@@ -70,6 +42,8 @@ export const SHUFFLE_METHODS: { readonly id: ShuffleStyle; readonly label: strin
 })
 export class QuestionComponent implements OnDestroy {
   private readonly packService = inject(PackService);
+  protected readonly locale = inject(LocaleService);
+  protected readonly t = this.locale.t;
 
   readonly draw = output<DrawnEvent>();
 
@@ -79,13 +53,10 @@ export class QuestionComponent implements OnDestroy {
   protected readonly cutDepth = signal(0);
   protected readonly cutFaceDown = signal(true);
   protected readonly pack = signal<LenormandCard[]>([]);
-  protected readonly method = signal<ShuffleStyle>('riffle');
   protected readonly laying = signal(false);
   protected readonly mixStep = signal<MixStep>('spread');
-  protected readonly washBits = signal<{ i: number; x: number; y: number; r: number }[]>([]);
   protected readonly reducedMotion = prefersReducedMotion();
   protected readonly ringNumber = RING_CARD_NUMBER;
-  protected readonly methods = SHUFFLE_METHODS;
   protected readonly leftLayers = [0, 1, 2, 3, 4];
   protected readonly rightLayers = [0, 1, 2, 3, 4];
   protected readonly factory = computed(() => this.packService.isFactory());
@@ -115,11 +86,6 @@ export class QuestionComponent implements OnDestroy {
 
   protected toggleNote(): void {
     this.noteQuestion.update((on) => !on);
-  }
-
-  protected pickMethod(style: ShuffleStyle): void {
-    this.method.set(style);
-    playTap();
   }
 
   protected shuffleAgain(): void {
@@ -198,13 +164,12 @@ export class QuestionComponent implements OnDestroy {
     this.shuffleTimer = setTimeout(() => this.emitDraw(), delay);
   }
 
-  protected newPack(): void {
-    if (this.phase() !== 'idle' && this.phase() !== 'shuffled') {
-      return;
+  protected cutCardName(): string {
+    const card = this.pack()[this.cutDepth() - 1];
+    if (!card) {
+      return '';
     }
-    this.packService.newPack();
-    this.pack.set([]);
-    this.phase.set('idle');
+    return this.locale.isFr() ? card.nameFr : card.name;
   }
 
   private mixAt(position: number): void {
@@ -248,26 +213,13 @@ export class QuestionComponent implements OnDestroy {
     this.phase.set('shuffling');
     this.cutFaceDown.set(true);
     this.pack.set([]);
-    if (this.method() === 'wash') {
-      this.washBits.set(
-        Array.from({ length: 16 }, (_, i) => ({
-          i,
-          x: Math.round((Math.random() - 0.5) * 220),
-          y: Math.round((Math.random() - 0.5) * 120),
-          r: Math.round((Math.random() - 0.5) * 56),
-        })),
-      );
-    } else {
-      this.washBits.set([]);
-    }
-    this.packService.set(shuffleWith(this.packService.cards(), this.method()));
-    playShuffle(this.method());
-    const delay = this.reducedMotion ? 0 : SHUFFLE_MS[this.method()];
+    this.packService.set(casinoShuffle(this.packService.cards()));
+    playShuffle();
+    const delay = this.reducedMotion ? 0 : SHUFFLE_MS;
     this.shuffleTimer = setTimeout(() => this.becomeShuffled(), delay);
   }
 
   private becomeShuffled(): void {
-    this.washBits.set([]);
     this.phase.set('shuffled');
   }
 

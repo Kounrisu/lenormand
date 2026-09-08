@@ -14,6 +14,7 @@ import { ReadingsService } from '../../core/readings.service';
 import { RING_CARD_NUMBER, YES_NO_CUTOFF } from '../../core/cards.data';
 import type { DrawResult } from '../../core/deck';
 import { playDeal } from '../../core/sounds';
+import { LocaleService } from '../../core/locale.service';
 
 const REVEAL_MS = 320;
 const RING_BEAT_MS = 900;
@@ -27,6 +28,8 @@ const RING_BEAT_MS = 900;
 })
 export class ReadingComponent implements OnInit, OnDestroy {
   private readonly readingsService = inject(ReadingsService);
+  protected readonly locale = inject(LocaleService);
+  protected readonly t = this.locale.t;
 
   readonly draw = input.required<DrawResult>();
   readonly question = input<string | null>(null);
@@ -39,6 +42,10 @@ export class ReadingComponent implements OnInit, OnDestroy {
   protected readonly revealedCount = signal(0);
   protected readonly firstThirteen = computed(() => this.draw().deck.slice(0, YES_NO_CUTOFF));
   protected readonly done = computed(() => this.revealedCount() >= YES_NO_CUTOFF);
+  protected readonly cutCardName = computed(() => {
+    const card = this.draw().cutCard;
+    return this.locale.isFr() ? card.nameFr : card.name;
+  });
 
   private timer?: ReturnType<typeof setTimeout>;
   private recorded = false;

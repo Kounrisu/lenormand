@@ -66,5 +66,40 @@
 .card--highlighted .card__face--front {
   box-shadow:
     0 0 0 2px var(--gold),
-    0 10px 28px rgba(224, 184, 74, 0.5);
+    0 10px 28px var(--glow-yes);
+  animation: card-highlight-pulse 1.8s ease-in-out infinite;
+}
+
+.card--highlighted .card__face--front::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--shimmer-gold);
+  background-size: 260% 100%;
+  mix-blend-mode: soft-light;
+  animation: shimmer-sweep 1.6s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes card-highlight-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 2px var(--gold),
+      0 10px 28px var(--glow-yes);
+  }
+  50% {
+    box-shadow:
+      0 0 0 2px var(--gold),
+      0 14px 40px var(--glow-yes);
+  }
+}
+
+@keyframes shimmer-sweep {
+  0% {
+    background-position: 140% 0;
+  }
+  100% {
+    background-position: -140% 0;
+  }
 }

@@ -1,25 +1,10 @@
 <div class="question">
   @if (phase() === 'idle' || phase() === 'shuffling' || phase() === 'shuffled') {
     <div class="pit">
-      @if (phase() === 'shuffling' && method() === 'wash') {
-        <div class="wash" aria-hidden="true">
-          @for (bit of washBits(); track bit.i) {
-            <span
-              class="wash__card card-back"
-              [style.transform]="'translate(' + bit.x + 'px,' + bit.y + 'px) rotate(' + bit.r + 'deg)'"
-            ></span>
-          }
-        </div>
-      }
-
       <button
         type="button"
         class="pack"
         [class.pack--busy]="phase() === 'shuffling'"
-        [class.pack--riffle]="method() === 'riffle' || method() === 'casino'"
-        [class.pack--overhand]="method() === 'overhand'"
-        [class.pack--strip]="method() === 'strip'"
-        [class.pack--wash]="method() === 'wash'"
         [disabled]="phase() === 'shuffling'"
         (click)="shuffleAgain()"
       >
@@ -33,54 +18,38 @@
             <span class="pack__layer card-back" [style.--i]="i"></span>
           }
         </span>
-        <span class="pack__label">{{ phase() === 'shuffling' ? method() + '…' : 'Shuffle' }}</span>
+        <span class="pack__label">{{ phase() === 'shuffling' ? t('question.shuffling') : t('question.shuffle') }}</span>
       </button>
     </div>
 
     <div class="question__side">
-      <h1 class="question__title">Yes or no?</h1>
+      <h1 class="question__title">{{ t('question.title') }}</h1>
       <p class="question__lede">
         @switch (phase()) {
           @case ('shuffling') {
-            Hold the question. Don’t rush the shuffle.
+            {{ t('question.lede.shuffling') }}
           }
           @case ('shuffled') {
-            Shuffle again, split the pack yourself, or seek a yes or no.
+            {{ t('question.lede.shuffled') }}
           }
           @default {
             @if (factory()) {
-              Hold a yes-or-no. Shuffle, or split the pack by hand, then seek.
+              {{ t('question.lede.idleFactory') }}
             } @else {
-              The pack is as you left it. Shuffle, split it yourself, or seek a yes or no.
+              {{ t('question.lede.idleNonFactory') }}
             }
           }
         }
       </p>
 
       <div class="question__controls">
-        <div class="methods" role="radiogroup" aria-label="Shuffle style">
-          @for (item of methods; track item.id) {
-            <button
-              type="button"
-              class="methods__chip"
-              role="radio"
-              [attr.aria-checked]="method() === item.id"
-              [class.methods__chip--on]="method() === item.id"
-              [disabled]="phase() === 'shuffling'"
-              (click)="pickMethod(item.id)"
-            >
-              {{ item.label }}
-            </button>
-          }
-        </div>
-
         @if (phase() === 'idle' || phase() === 'shuffled') {
-          <p class="question__or">or</p>
+          <p class="question__or">{{ t('question.or') }}</p>
           <button type="button" class="btn btn--ghost question__deed" (click)="spreadToMix()">
-            Split it yourself
+            {{ t('question.splitYourself') }}
           </button>
           <button type="button" class="btn btn--primary question__deed" (click)="spreadToAsk()">
-            Seek a yes or no
+            {{ t('question.seek') }}
           </button>
         }
       </div>
@@ -96,19 +65,19 @@
           <span class="question__switch" [class.question__switch--on]="noteQuestion()">
             <span class="question__knob"></span>
           </span>
-          Write the question down
+          {{ t('question.writeDown') }}
         </button>
 
         @if (noteQuestion()) {
           <label class="question__field" for="question-input">
-            <span class="question__label">Your question</span>
+            <span class="question__label">{{ t('question.yourQuestion') }}</span>
             <textarea
               id="question-input"
               class="question__input"
               name="question"
               rows="2"
               maxlength="200"
-              placeholder="Will it work out?"
+              [placeholder]="t('question.placeholder')"
               [(ngModel)]="question"
             ></textarea>
           </label>
@@ -120,15 +89,15 @@
   @if (phase() === 'mixing' || phase() === 'asking' || phase() === 'cut-reveal') {
     <p class="question__lede">
       @if (phase() === 'cut-reveal') {
-        {{ pack()[cutDepth() - 1]?.name }}
+        {{ cutCardName() }}
       } @else if (phase() === 'mixing' && mixStep() === 'cut') {
-        The top goes under.
+        {{ t('question.mixing.cut') }}
       } @else if (phase() === 'mixing' && mixStep() === 'lay') {
-        The pack spreads on the cloth.
+        {{ t('question.mixing.lay') }}
       } @else if (phase() === 'mixing') {
-        Tap where you cut. The top goes under the rest.
+        {{ t('question.mixing.spread') }}
       } @else {
-        Tap the cut. That card answers.
+        {{ t('question.asking.spread') }}
       }
     </p>
 
@@ -166,7 +135,7 @@
     </div>
 
     @if ((phase() === 'mixing' || phase() === 'asking') && mixStep() !== 'cut' && cutDepth() === 0) {
-      <button type="button" class="question__shuffle" (click)="gather()">Back to the pack</button>
+      <button type="button" class="question__shuffle" (click)="gather()">{{ t('question.backToPack') }}</button>
     }
   }
 </div>

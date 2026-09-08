@@ -4,12 +4,12 @@
   }
 
   @if (draw().atCut) {
-    <p class="reading__hint">At the cut</p>
+    <p class="reading__hint">{{ t('reading.atCut') }}</p>
     <div class="reading__cut">
       <app-card [card]="draw().cutCard" [highlighted]="true" />
     </div>
   } @else {
-    <p class="reading__cut-note">The cut was the {{ draw().cutCard.name }}.</p>
+    <p class="reading__cut-note">{{ t('reading.cutNote', cutCardName()) }}</p>
 
     <div class="pit">
       <div class="stock" aria-hidden="true">
@@ -34,8 +34,8 @@
 
     @if (!done()) {
       <p class="reading__hint">
-        Dealing
-        <button type="button" class="reading__skip" (click)="skipToEnd()">Turn them all</button>
+        {{ t('reading.dealing') }}
+        <button type="button" class="reading__skip" (click)="skipToEnd()">{{ t('reading.turnAll') }}</button>
       </p>
     }
   }

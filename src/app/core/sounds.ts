@@ -62,25 +62,8 @@ function playSnippet(src: string, start: number, durationMs: number, volume = 0.
   live.push(el);
 }
 
-export function playShuffle(style: 'riffle' | 'overhand' | 'strip' | 'wash' | 'casino'): void {
+export function playShuffle(): void {
   stopLive();
-  if (style === 'riffle') {
-    playFile(files.riffle, { volume: 0.95, rate: 1 });
-    return;
-  }
-  if (style === 'overhand') {
-    playFile(files.shuffle, { volume: 0.9, rate: 0.92 });
-    return;
-  }
-  if (style === 'strip') {
-    playFile(files.shuffle, { volume: 0.85, rate: 1.05 });
-    setTimeout(() => playFile(files.riffle, { volume: 0.7, rate: 1.1, maxMs: 900 }), 500);
-    return;
-  }
-  if (style === 'wash') {
-    playFile(files.riffleLong, { volume: 0.9, rate: 1, maxMs: 2200 });
-    return;
-  }
   playFile(files.riffleLong, { volume: 0.92, rate: 1, maxMs: 3000 });
 }
 

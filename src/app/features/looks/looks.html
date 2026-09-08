@@ -1,8 +1,32 @@
 <div class="looks">
-  <h2>Settings</h2>
-  <p class="looks__lede">The back of the pack, the faces, and the cloth they sit on.</p>
+  <h2>{{ t('looks.title') }}</h2>
+  <p class="looks__lede">{{ t('looks.lede') }}</p>
 
-  <h3>Card backs</h3>
+  <h3>{{ t('looks.languageHeading') }}</h3>
+  <div class="looks__row" role="radiogroup" [attr.aria-label]="t('looks.languageHeading')">
+    <button
+      type="button"
+      class="looks__pack"
+      role="radio"
+      [attr.aria-checked]="locale.locale() === 'en'"
+      [class.looks__pack--on]="locale.locale() === 'en'"
+      (click)="locale.set('en')"
+    >
+      {{ t('looks.english') }}
+    </button>
+    <button
+      type="button"
+      class="looks__pack"
+      role="radio"
+      [attr.aria-checked]="locale.locale() === 'fr'"
+      [class.looks__pack--on]="locale.locale() === 'fr'"
+      (click)="locale.set('fr')"
+    >
+      {{ t('looks.french') }}
+    </button>
+  </div>
+
+  <h3>{{ t('looks.backsHeading') }}</h3>
   <div class="looks__row" role="radiogroup" aria-label="Card back">
     @for (pack of theme.backs; track pack.id) {
       <button
@@ -19,8 +43,8 @@
     }
   </div>
 
-  <h3>Card faces</h3>
-  <div class="looks__row" role="radiogroup" aria-label="Card faces">
+  <h3>{{ t('looks.facesHeading') }}</h3>
+  <div class="looks__row" role="radiogroup" [attr.aria-label]="t('looks.facesHeading')">
     <button type="button" class="looks__pack looks__pack--on" role="radio" aria-checked="true">
       <span
         class="looks__pack-face looks__pack-face--front"
@@ -30,12 +54,12 @@
     </button>
     <span class="looks__soon">
       <span class="looks__soon-face">?</span>
-      More later
+      {{ t('looks.moreLater') }}
     </span>
   </div>
 
-  <h3>Cloth</h3>
-  <div class="looks__row" role="radiogroup" aria-label="Cloth">
+  <h3>{{ t('looks.clothHeading') }}</h3>
+  <div class="looks__row" role="radiogroup" [attr.aria-label]="t('looks.clothHeading')">
     @for (cloth of theme.cloths; track cloth.id) {
       <button
         type="button"
@@ -52,7 +76,7 @@
   </div>
 
   @if (!pack.isFactory()) {
-    <button type="button" class="looks__deed" (click)="freshPack()">New pack</button>
+    <button type="button" class="looks__deed" (click)="freshPack()">{{ t('looks.newPack') }}</button>
   }
-  <button type="button" class="btn btn--primary" (click)="back.emit()">Back to the table</button>
+  <button type="button" class="btn btn--primary" (click)="back.emit()">{{ t('looks.backToTable') }}</button>
 </div>

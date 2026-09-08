@@ -5,6 +5,8 @@ import { HistoryComponent } from './features/history/history';
 import { LooksComponent } from './features/looks/looks';
 import { AboutComponent } from './features/about/about';
 import { ThemeService } from './core/theme.service';
+import { PackService } from './core/pack.service';
+import { LocaleService } from './core/locale.service';
 import type { DrawResult } from './core/deck';
 
 type View = 'ask' | 'reading' | 'history' | 'looks' | 'about';
@@ -18,6 +20,9 @@ type View = 'ask' | 'reading' | 'history' | 'looks' | 'about';
 })
 export class App {
   private readonly theme = inject(ThemeService);
+  protected readonly pack = inject(PackService);
+  protected readonly locale = inject(LocaleService);
+  protected readonly t = this.locale.t;
 
   protected readonly view = signal<View>('ask');
   protected readonly question = signal<string | null>(null);
@@ -51,5 +56,12 @@ export class App {
 
   protected showAbout(): void {
     this.view.set('about');
+  }
+
+  protected newDeck(): void {
+    if (this.view() !== 'ask') {
+      return;
+    }
+    this.pack.newPack();
   }
 }

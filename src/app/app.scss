@@ -43,6 +43,15 @@
   display: none;
 }
 
+.scene::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: var(--vignette);
+}
+
 .app__header {
   position: absolute;
   z-index: 4;
@@ -73,6 +82,7 @@
 }
 
 .app__wordmark {
+  position: relative;
   margin: 0;
   display: flex;
   flex-direction: column;
@@ -88,6 +98,44 @@
   grid-column: 2;
   grid-row: 1;
   justify-self: center;
+}
+
+.app__new-deck {
+  position: absolute;
+  top: -0.15rem;
+  left: calc(100% + 0.3rem);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  border: 1px solid rgba(224, 184, 74, 0.55);
+  background: rgba(20, 8, 4, 0.28);
+  color: var(--gold);
+  cursor: pointer;
+  opacity: 0.95;
+  transition:
+    opacity 0.2s ease,
+    transform 0.15s ease;
+}
+
+.app__new-deck svg {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+
+.app__new-deck--dim {
+  opacity: 0.45;
+}
+
+.app__new-deck:hover {
+  transform: scale(1.08);
+  opacity: 1;
+}
+
+.app__new-deck:active {
+  transform: scale(0.95);
 }
 
 .app__wordmark-name {
@@ -147,6 +195,7 @@
 
 .mat {
   position: absolute;
+  z-index: 2;
   top: var(--play-top);
   left: var(--play-left);
   width: var(--play-width);
@@ -207,20 +256,58 @@
 }
 
 .result-sheet__verdict {
+  position: relative;
   margin: 0;
   font-family: Fraunces, ui-serif, Georgia, serif;
   font-size: clamp(2.6rem, 13vw, 4rem);
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 0.95;
+  animation: result-verdict-in 0.6s cubic-bezier(0.2, 0.7, 0.15, 1) both;
 }
 
 .result-sheet__verdict--yes {
-  color: #1d5c32;
+  color: var(--brass);
+  text-shadow:
+    0 0 18px var(--glow-yes),
+    0 0 40px var(--glow-yes);
 }
 
 .result-sheet__verdict--no {
-  color: #8a2433;
+  color: var(--oxblood);
+  text-shadow: 0 0 22px var(--glow-no);
+  animation:
+    result-verdict-in 0.6s cubic-bezier(0.2, 0.7, 0.15, 1) both,
+    verdict-pulse-no 2.4s ease-in-out 0.6s infinite;
+}
+
+@keyframes result-verdict-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.7);
+    filter: blur(6px);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.06);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes verdict-pulse-no {
+  0%,
+  100% {
+    text-shadow: 0 0 22px var(--glow-no);
+  }
+  50% {
+    text-shadow:
+      0 0 10px var(--glow-no),
+      0 0 34px var(--glow-no);
+  }
 }
 
 .result-sheet__detail {

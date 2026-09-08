@@ -1,10 +1,14 @@
 export interface LenormandCard {
   readonly number: number;
   readonly name: string;
+  readonly nameFr: string;
   readonly slug: string;
   readonly playingCard: string;
   readonly meaning: string;
+  readonly meaningFr: string;
 }
+
+export type Locale = 'en' | 'fr';
 
 export type Answer = 'yes' | 'no';
 

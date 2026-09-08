@@ -1,12 +1,12 @@
 <div class="history">
-  <h2>Past draws</h2>
+  <h2>{{ t('history.title') }}</h2>
 
   @if (readingsService.loading()) {
-    <p class="history__hint">Loading…</p>
+    <p class="history__hint">{{ t('history.loading') }}</p>
   } @else if (readingsService.loadError()) {
-    <p class="history__hint">Couldn't load past draws.</p>
+    <p class="history__hint">{{ t('history.error') }}</p>
   } @else if (readingsService.history().length === 0) {
-    <p class="history__hint">Nothing here yet. Shuffle the deck first.</p>
+    <p class="history__hint">{{ t('history.empty') }}</p>
   } @else {
     <ul class="history__list">
       @for (reading of readingsService.history(); track reading.id) {
@@ -16,12 +16,12 @@
             [class.history__answer--yes]="reading.answer === 'yes'"
             [class.history__answer--no]="reading.answer === 'no'"
           >
-            {{ reading.answer === 'yes' ? 'Yes' : 'No' }}
+            {{ reading.answer === 'yes' ? t('result.yes') : t('result.no') }}
           </span>
           <span class="history__body">
-            <span class="history__question">{{ reading.question ?? 'No question written' }}</span>
+            <span class="history__question">{{ reading.question ?? t('history.noQuestion') }}</span>
             <span class="history__meta">
-              Ring at {{ reading.ringPosition }} · {{ reading.createdAt | date: 'medium' }}
+              {{ t('history.ringAt', reading.ringPosition) }}{{ reading.createdAt | date: 'medium' }}
             </span>
           </span>
         </li>
@@ -29,5 +29,5 @@
     </ul>
   }
 
-  <button type="button" class="btn btn--ghost" (click)="back.emit()">Back to the table</button>
+  <button type="button" class="btn btn--ghost" (click)="back.emit()">{{ t('history.back') }}</button>
 </div>
