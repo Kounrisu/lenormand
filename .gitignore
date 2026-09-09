@@ -50,3 +50,7 @@ backend/dist
 # System files
 .DS_Store
 Thumbs.db
+
+# Local-only material (secrets, mood boards, heavy/draft assets)
+# — never committed. See docs/README.md
+/docs_sensitive/
